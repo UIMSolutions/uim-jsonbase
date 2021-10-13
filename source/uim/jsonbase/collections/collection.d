@@ -19,9 +19,8 @@ abstract class DJDBCollection {
   Json lastVersion(string colName, UUID id) { return Json(null); }
   size_t lastVersionNumber(string colName, UUID id) { return 0; }
   
-  Json[] lastVersions(string colName) {
-    Json[] results;
-    return results;
+  Json lastVersion(Json[] jsons) {
+    return maxJson!size_t(jsons, "versionNumber");
   }
 
   Json[] versions(string colName, UUID id) {
@@ -73,16 +72,14 @@ abstract class DJDBCollection {
 
 // #region read
   // Searching in store
-  Json[] findMany(bool allVersions = false) {
-    return []; }
+  abstract Json[] findMany(bool allVersions = false);
 
   // Searching for existing ids
   Json[] findMany(UUID[] ids, bool allVersions = false) {
     return ids.map!(a => findMany(a, allVersions)).join; }
 
   // Searching for existing id
-  Json[] findMany(UUID id, bool allVersions = false) {
-    return null; }
+  abstract Json[] findMany(UUID id, bool allVersions = false);
 
   // Searching for existing ids & versionNumber
   Json[] findMany(UUID[] ids, size_t versionNumber) {
@@ -92,18 +89,20 @@ abstract class DJDBCollection {
   Json[] findMany(STRINGAA[] selects, bool allVersions = false) {
     return selects.map!(a => findMany(a, allVersions)).join; }
 
-  // Searching based on parameter "select":string[string]
+  /// Find all (many) items in a collection with select. allVersions:false = find last version, allVersion:true = find all versions
   Json[] findMany(STRINGAA select, bool allVersions = false) {
-    return null; }
-
+    Json[] results;
+    foreach(json; findMany(allVersions)) if (checkVersion(json, select)) results ~= json;
+    return results; }
+    
   // Searching for existing selects:json[]
   Json[] findMany(Json[] selects, bool allVersions = false) {
     return selects.map!(a => findMany(a, allVersions)).join; }
 
-  // Searching based on parameter "select":Json[]
+  /// Find all (many) items in a collection with select. allVersions:false = find last version, allVersion:true = find all versions
   Json[] findMany(Json select, bool allVersions = false) {
-    return []; }
-// #endregion
+    Json[] results = findMany(allVersions);
+    return results.filter!(a => checkVersion(a, select)).array; }
 
 // #region findOne
   // Searching in store
@@ -184,6 +183,17 @@ abstract class DJDBCollection {
 
 
   // #region Remove By json
+    size_t removeMany(STRINGAA[] selects, bool allVersions = false) {
+      return selects.map!(a => removeMany(a, allVersions)).sum; }
+  // #endregion Remove By json
+
+  // #region Searching based on parameter "select":Json[]
+    size_t removeMany(STRINGAA select, bool allVersions = false) {
+      auto jsons = findMany(select, allVersions);
+      return jsons.map!(a => removeOne(a) ? 1 : 0).sum; }
+  // #endregion Searching based on parameter "select":Json[]
+
+  // #region Remove By json
     size_t removeMany(Json[] selects, bool allVersions = false) {
       return selects.map!(a => removeMany(a, allVersions)).sum; }
   // #endregion Remove By json
@@ -217,15 +227,14 @@ abstract class DJDBCollection {
   bool removeOne(STRINGAA[] selects, bool allVersions = false) {
     return selects.map!(a => removeOne(a, allVersions)).sum > 0; }
 
-  bool removeOne(STRINGAA select, bool allVersions = false) {
-    Json json = select.serializeToJson;
-    return removeOne(json, allVersions); }
+  /// remove one selected item
+  abstract bool removeOne(STRINGAA select, bool allVersions = false);
 
+  /// remove one selected item
   bool removeOne(Json[] selects, bool allVersions = false) {
-    return selects.map!(a => removeOne(a, allVersions)).sum > 0; }
-
-  bool removeOne(Json select, bool allVersions = false) {
+    foreach (select; selects) if (removeOne(select, allVersions)) return true;
     return false; }
-  // #endregion Searching based on parameter "select":Json[]
-  // #endregion RemoveMany
+
+  /// remove one selected item
+  abstract bool removeOne(Json select, bool allVersions = false);
 }

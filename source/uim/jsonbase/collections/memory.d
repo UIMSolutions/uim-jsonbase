@@ -1,11 +1,12 @@
-module uim.jsonbase.collections.file;
+module uim.jsonbase.collections.memory;
 
 @safe:
 import uim.jsonbase;
 
-class DJDBFileCollection : DJDBCollection {
+class DJDBMemCollection : DJDBCollection {
   this() { super();  }
-  this(string newPath) { this().path(newPath); }
+  
+  protected Json[size_t][UUID] _colItems;
   
   protected string _pathSeparator = "/";
   @property auto pathSeparator() { return _pathSeparator; } 
@@ -20,23 +21,20 @@ class DJDBFileCollection : DJDBCollection {
     _path = pathExists ? newPath : ""; } 
 
 
-  /// find many items 
   alias findMany = DJDBCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
     Json[] results;
     if (!pathExists) return results;
 
-    auto ids = dirNames(path, false);    
-    foreach(id; ids) {
+    auto Ids = dirNames(path, false);    
+    foreach(id; Ids) {
       if (id.isUUID) results ~= findMany(UUID(id), allVersions);
     }
     return results; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findMany(col));
-      assert(test_findMany_allVersions(col));
+      auto col = JDBMemCollection;
     }
   }
 
@@ -58,9 +56,8 @@ class DJDBFileCollection : DJDBCollection {
     return results; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findMany_id(col));
-      assert(test_findMany_id_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -68,26 +65,21 @@ class DJDBFileCollection : DJDBCollection {
     return super.findMany(select, allVersions); }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findMany_select(col));
-      assert(test_findMany_select_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
-  /// find items by select - allVersions:false - last versions; allVersions:true - all versions
   override Json[] findMany(Json select, bool allVersions = false) {
     return super.findMany(select, allVersions); }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findMany_jselect(col));
-      assert(test_findMany_jselect_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
-  /// find one item 
   alias findOne = DJDBCollection.findOne;
-  /// Find one item in a collection. allVersions:false = last version, allVersion:true = one version
   override Json findOne(UUID id, bool allVersions = false) {
     auto result = Json(null); 
 
@@ -102,9 +94,8 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findOne_id(col));
-      assert(test_findOne_id_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -122,8 +113,8 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findOne_id_versionNumber(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -141,9 +132,8 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findOne_select(col));
-      assert(test_findOne_select_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -161,14 +151,11 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findOne_jselect(col));
-      assert(test_findOne_jselect_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
-  /// find one item 
-  alias insertOne = DJDBCollection.insertOne;
   override Json insertOne(Json newData) {
     auto result = Json(null); 
 
@@ -184,8 +171,8 @@ class DJDBFileCollection : DJDBCollection {
     return findOne(newData); }  
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_insertOne_data(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -204,8 +191,8 @@ class DJDBFileCollection : DJDBCollection {
     return jsons.length; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_updateMany_select_data(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -220,15 +207,12 @@ class DJDBFileCollection : DJDBCollection {
     return true; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_updateOne_select_data(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
-
-  /// Remove items from collections
   alias removeMany = DJDBCollection.removeMany;
-  /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) {
     if (!pathExists) return 0;
 
@@ -237,7 +221,8 @@ class DJDBFileCollection : DJDBCollection {
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -255,7 +240,8 @@ class DJDBFileCollection : DJDBCollection {
     return (!pathToVersion.exists ? 1 : 0); } 
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -267,9 +253,8 @@ class DJDBFileCollection : DJDBCollection {
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeMany_select(col));
-      assert(test_removeMany_select_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -281,9 +266,8 @@ class DJDBFileCollection : DJDBCollection {
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeMany_jselect(col));
-      assert(test_removeMany_jselect_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -300,9 +284,8 @@ class DJDBFileCollection : DJDBCollection {
     return false; } 
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeOne_id(col));
-      assert(test_removeOne_id_allVersions(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -320,8 +303,8 @@ class DJDBFileCollection : DJDBCollection {
     return (!pathToVersion.exists ? true : false); } 
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeOne_id_versionNumber(col));
+      auto col = JDBMemCollection;
+      /// TODO
     }
   }
 
@@ -348,10 +331,11 @@ class DJDBFileCollection : DJDBCollection {
     return false; }
   unittest { 
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeOne_select(col));
-      assert(test_removeOne_select_allVersions(col));
-    }
+      auto col = JDBMemCollection;
+      auto data = ["id": randomUUID.toString, "versionNumber":"10"];
+/*       auto json = col.insertOne(data);
+      assert(col.removeOne(data));
+ */    }
   }
 
   override bool removeOne(Json select, bool allVersions = false) {
@@ -378,11 +362,13 @@ class DJDBFileCollection : DJDBCollection {
     return false; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeOne_jselect(col));
-      assert(test_removeOne_jselect_allVersions(col));
+      auto col = JDBMemCollection;
+      auto json = col.insertOne(toJson(randomUUID, 10));
+      assert(col.removeOne(json));
+
+      json = col.insertOne(toJson(randomUUID));
+      assert(col.removeOne(UUID(json["id"].get!string)));
     }
   }
 }
-auto JDBFileCollection() { return new DJDBFileCollection;  }
-auto JDBFileCollection(string newPath) { return new DJDBFileCollection(newPath); }
+auto JDBMemCollection() { return new DJDBMemCollection;  }
