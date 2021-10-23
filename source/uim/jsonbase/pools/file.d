@@ -1,34 +1,42 @@
-module uim.jsonbase.pools.file;
+module uim.jsonbase.tenants.file;
 
 @safe:
 import uim.jsonbase;
 
-class DJBFilePool : DJBPool {
+/// FileTenant manages FileCollections
+class DJBFileTenant : DJBTenant {
   this() { super(); }
   this(string newRootPath) {
     this();
-    rootPath = newRootPath;
-  }
+    this.rootPath(newRootPath); }
 
+  /// Collection of existing paths
   protected string _rootPath;
   @property string rootPath() { return _rootPath; }
-  @property void rootPath(string newRootPath) { 
-    _rootPath = newRootPath; 
-    
-    auto dirs = dirNames(rootPath);  
-    foreach(dir; dirs) {
-      _collections[dir] = JDBFileCollection(rootPath~"/"~dir); 
-    }
+  @property O rootPath(this O)(string newRootPath) { 
+    if (newRootPath.exists) {
+      _rootPath = newRootPath; 
+
+      auto dirs = dirNames(_rootPath);  
+      foreach(dir; dirs) {
+        _collections[dir] = JSBFileCollection(_rootPath~"/"~dir);
+    }}
+
+    return cast(O)this; }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
   }
 }
-auto JBFilePool() { return new DJBFilePool; }
-auto JBFilePool(string newRootPath) { return new DJBFilePool(newRootPath); }
+auto JBFileTenant() { return new DJBFileTenant; }
+auto JBFileTenant(string newRootPath) { return new DJBFileTenant(newRootPath); }
 
 unittest {
-  auto pool = JBFilePool("/home/oz/Documents/PROJECTS/DATABASES/uim/uim");
-  pool.rootPath("/home/oz/Documents/PROJECTS/DATABASES/uim/central");
+  auto tenant = JBFileTenant("/home/oz/Documents/PROJECTS/DATABASES/uim/uim");
+  tenant.rootPath("/home/oz/Documents/PROJECTS/DATABASES/uim/central");
    
-  foreach(colName, col; pool.collections) {
-    writeln(colName, "\t->\t", (cast(DJDBFileCollection)col).path, "\t->\t", col.findMany.length);
+  foreach(colName, col; tenant.collections) {
+    writeln(colName, "\t->\t", (cast(DJSBFileCollection)col).path, "\t->\t", col.findMany.length);
   }
 }

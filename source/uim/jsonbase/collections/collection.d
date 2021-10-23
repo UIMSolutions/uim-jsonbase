@@ -3,7 +3,7 @@ module uim.jsonbase.collections.collection;
 @safe:
 import uim.jsonbase;
 
-abstract class DJDBCollection {
+abstract class DJSBCollection {
   this() { }
 
   bool has(Json entity, UUID id) {
@@ -16,23 +16,19 @@ abstract class DJDBCollection {
     return (versionNumber != 0) && (jsonData["versionNumber"].get!size_t == versionNumber);
   }
 
-  Json lastVersion(string colName, UUID id) { return Json(null); }
+/*   Json lastVersion(string colName, UUID id) { return Json(null); }
   size_t lastVersionNumber(string colName, UUID id) { return 0; }
   
-  Json lastVersion(Json[] jsons) {
-    return maxJson!size_t(jsons, "versionNumber");
-  }
-
   Json[] versions(string colName, UUID id) {
     return null;
   }
-
-  Json[] versions(Json[size_t][UUID] col, UUID id) {
+ */
+/*   Json[] versions(Json[size_t][UUID] col, UUID id) {
     if (id !in col) return null;
     return col[id].byValue.array; }
 
   Json[] versions(Json[size_t] entity) { 
-    return entity.byValue.array; }
+    return entity.byValue.array; } */
 
   /// Count all items in the collection with ids and versions.
   /// allVersion = true include versions; = false results in existing ids 
@@ -144,68 +140,55 @@ abstract class DJDBCollection {
 
   Json insertOne(Json newData) {
     return Json(null); }
-// #endregion
 
-// #region update
+  size_t updateMany(STRINGAA select, STRINGAA updateData) {
+    return updateMany(select.toJson, updateData.toJson); }
+
   size_t updateMany(STRINGAA select, Json updateData) {
-    return updateMany(select.serializeToJson, updateData); }
+    return updateMany(select.toJson, updateData); }
 
-  size_t updateMany(Json select, Json updateData) {
-    return 0; }
-// #endregion
+  size_t updateMany(Json select, STRINGAA updateData) {
+    return updateMany(select, updateData.toJson); }
 
-// #region update
+  abstract size_t updateMany(Json select, Json updateData);
 
+  bool updateOne(STRINGAA select, STRINGAA updateData) {
+    return updateOne(select.toJson, updateData.toJson); }
 
   bool updateOne(STRINGAA select, Json updateData) {
     return updateOne(select.serializeToJson, updateData); }
 
-  bool updateOne(Json select, Json updateData) {
-    return false; }
-// #endregion
+  bool updateOne(Json select, STRINGAA updateData) {
+    return updateOne(select, updateData.toJson); }
 
-// #region removeMany by entity    
-  // #region Remove by id 
-    size_t removeMany(UUID[] ids, bool allVersions = false) {
-      return ids.map!(a => removeMany(a, allVersions)).sum; }
+  abstract bool updateOne(Json select, Json updateData);
 
-    size_t removeMany(UUID id, bool allVersions = false) {
-      return 0; }
-  // #endregion Remove by id 
+  size_t removeMany(UUID[] ids, bool allVersions = false) {
+    return ids.map!(a => removeMany(a, allVersions)).sum; }
 
-  // #region Remove by id & versionNumber
-    size_t removeMany(UUID[] ids, size_t versionNumber) {
-      return ids.map!(a => removeMany(a, versionNumber)).sum; }
+  size_t removeMany(UUID id, bool allVersions = false) {
+    return 0; }
 
-    size_t removeMany(UUID id, size_t versionNumber) {
-      return 0; }
-  // #endregion
+  size_t removeMany(UUID[] ids, size_t versionNumber) {
+    return ids.map!(a => removeMany(a, versionNumber)).sum; }
 
+  size_t removeMany(UUID id, size_t versionNumber) {
+    return 0; }
 
-  // #region Remove By json
-    size_t removeMany(STRINGAA[] selects, bool allVersions = false) {
-      return selects.map!(a => removeMany(a, allVersions)).sum; }
-  // #endregion Remove By json
+  size_t removeMany(STRINGAA[] selects, bool allVersions = false) {
+    return selects.map!(a => removeMany(a, allVersions)).sum; }
 
-  // #region Searching based on parameter "select":Json[]
-    size_t removeMany(STRINGAA select, bool allVersions = false) {
-      auto jsons = findMany(select, allVersions);
-      return jsons.map!(a => removeOne(a) ? 1 : 0).sum; }
-  // #endregion Searching based on parameter "select":Json[]
+  size_t removeMany(STRINGAA select, bool allVersions = false) {
+    auto jsons = findMany(select, allVersions);
+    return jsons.map!(a => removeOne(a) ? 1 : 0).sum; }
 
-  // #region Remove By json
-    size_t removeMany(Json[] selects, bool allVersions = false) {
-      return selects.map!(a => removeMany(a, allVersions)).sum; }
-  // #endregion Remove By json
+  size_t removeMany(Json[] selects, bool allVersions = false) {
+    return selects.map!(a => removeMany(a, allVersions)).sum; }
 
-  // #region Searching based on parameter "select":Json[]
-    size_t removeMany(Json select, bool allVersions = false) {
-      auto jsons = findMany(select, allVersions);
-      return jsons.map!(a => removeOne(a) ? 1 : 0).sum; }
-  // #endregion Searching based on parameter "select":Json[]
-// #endregion RemoveMany
+  size_t removeMany(Json select, bool allVersions = false) {
+    auto jsons = findMany(select, allVersions);
+    return jsons.map!(a => removeOne(a) ? 1 : 0).sum; }
 
-  // #region Remove by id 
   bool removeOne(UUID[] ids, bool allVersions = false) {
     return ids.map!(a => removeOne(a, allVersions)).sum > 0; }
 
@@ -213,17 +196,14 @@ abstract class DJDBCollection {
     Json json = Json.emptyObject;
     json["id"] = id.toString;
     return removeOne(json, allVersions); }
-  // #endregion Remove by id 
 
-  /// Remove by id & versionNumber
   bool removeOne(UUID id, size_t versionNumber) {
     Json json = Json.emptyObject;
     json["id"] = id.toString;
     json["versionNumber"] = versionNumber;
     return removeOne(json); }
-  // #endregion
 
-  // #region RemoveMany by select (string[string])
+  /// RemoveMany by select (string[string])
   bool removeOne(STRINGAA[] selects, bool allVersions = false) {
     return selects.map!(a => removeOne(a, allVersions)).sum > 0; }
 

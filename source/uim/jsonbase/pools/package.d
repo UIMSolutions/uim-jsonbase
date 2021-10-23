@@ -1,7 +1,8 @@
-module uim.jsonbase.pools;
+module uim.jsonbase.tenants;
 
 @safe:
 import uim.jsonbase;
 
-public import uim.jsonbase.pools.pool;
-public import uim.jsonbase.pools.file;
+public import uim.jsonbase.tenants.file;
+public import uim.jsonbase.tenants.tenant;
+public import uim.jsonbase.tenants.tests;

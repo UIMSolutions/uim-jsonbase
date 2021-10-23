@@ -3,7 +3,7 @@ module uim.jsonbase.collections.file;
 @safe:
 import uim.jsonbase;
 
-class DJDBFileCollection : DJDBCollection {
+class DJSBFileCollection : DJSBCollection {
   this() { super();  }
   this(string newPath) { this().path(newPath); }
   
@@ -21,7 +21,7 @@ class DJDBFileCollection : DJDBCollection {
 
 
   /// find many items 
-  alias findMany = DJDBCollection.findMany;
+  alias findMany = DJSBCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
     Json[] results;
@@ -34,7 +34,7 @@ class DJDBFileCollection : DJDBCollection {
     return results; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findMany(col));
       assert(test_findMany_allVersions(col));
     }
@@ -58,7 +58,7 @@ class DJDBFileCollection : DJDBCollection {
     return results; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findMany_id(col));
       assert(test_findMany_id_allVersions(col));
     }
@@ -68,7 +68,7 @@ class DJDBFileCollection : DJDBCollection {
     return super.findMany(select, allVersions); }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col));
     }
@@ -79,14 +79,14 @@ class DJDBFileCollection : DJDBCollection {
     return super.findMany(select, allVersions); }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col));
     }
   }
 
   /// find one item 
-  alias findOne = DJDBCollection.findOne;
+  alias findOne = DJSBCollection.findOne;
   /// Find one item in a collection. allVersions:false = last version, allVersion:true = one version
   override Json findOne(UUID id, bool allVersions = false) {
     auto result = Json(null); 
@@ -102,7 +102,7 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findOne_id(col));
       assert(test_findOne_id_allVersions(col));
     }
@@ -116,16 +116,13 @@ class DJDBFileCollection : DJDBCollection {
       if (pathToId.exists) {
         auto pathToVersion = filePath(path, toJson(id, versionNumber), pathSeparator);
         if (!pathToVersion.exists) return Json(null); 
-        
         result = loadJson(pathToVersion); }}
 
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_findOne_id_versionNumber(col));
-    }
-  }
+      auto col = JSBFileCollection("./tests");
+      assert(test_findOne_id_versionNumber(col)); }}
 
   override Json findOne(STRINGAA select, bool allVersions = false) {
     auto result = Json(null); 
@@ -141,7 +138,7 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findOne_select(col));
       assert(test_findOne_select_allVersions(col));
     }
@@ -161,14 +158,14 @@ class DJDBFileCollection : DJDBCollection {
     return result; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_findOne_jselect(col));
       assert(test_findOne_jselect_allVersions(col));
     }
   }
 
   /// find one item 
-  alias insertOne = DJDBCollection.insertOne;
+  alias insertOne = DJSBCollection.insertOne;
   override Json insertOne(Json newData) {
     auto result = Json(null); 
 
@@ -184,8 +181,28 @@ class DJDBFileCollection : DJDBCollection {
     return findOne(newData); }  
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_insertOne_data(col));
+    }
+  }
+
+  override size_t updateMany(STRINGAA select, STRINGAA updateData) {
+    if (!pathExists) return 0;
+
+    auto jsons = findMany(select); 
+    foreach(json; jsons) {
+      foreach(kv; updateData.byKeyValue) {
+        if (kv.key == "id") continue;
+        if (kv.key == "versionNumber") continue;
+
+        json[kv.key] = kv.value; }
+      std.file.write(filePath(path, json, pathSeparator), json.toString);
+    }
+    return jsons.length; }
+  unittest {
+    version(uim_jsonbase) {
+      auto col = JSBFileCollection("./tests");
+      assert(test_updateMany_select_data(col));
     }
   }
 
@@ -204,7 +221,7 @@ class DJDBFileCollection : DJDBCollection {
     return jsons.length; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_updateMany_select_data(col));
     }
   }
@@ -220,44 +237,28 @@ class DJDBFileCollection : DJDBCollection {
     return true; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_updateOne_select_data(col));
     }
   }
 
-
   /// Remove items from collections
-  alias removeMany = DJDBCollection.removeMany;
+  alias removeMany = DJSBCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) {
     if (!pathExists) return 0;
 
     size_t counter;
-    foreach(json; findMany(id, allVersions)) counter += removeOne(json, allVersions);
+    foreach(item; findMany(id, allVersions)) {
+      counter++; 
+      removeOne(item, allVersions); }
+
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-    }
-  }
-
-  override size_t removeMany(UUID id, size_t versionNumber) {
-    if (!pathExists) return 0;
-
-    auto pathToId = dirPath(path, id, pathSeparator);
-    if (!pathToId.exists) return 0;
-
-    auto pathToVersion = filePath(path, toJson(id, versionNumber), pathSeparator);
-    if (!pathToVersion.exists) return 0;
-
-    pathToVersion.remove;
-    if (fileNames(pathToId, true).empty) pathToId.remove;
-    return (!pathToVersion.exists ? 1 : 0); } 
-  unittest {
-    version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-    }
-  }
+      auto col = JSBFileCollection("./tests");
+      assert(test_removeMany_id(col));
+      assert(test_removeMany_id_allVersions(col)); }}
 
   override size_t removeMany(STRINGAA select, bool allVersions = false) {
     if (!pathExists) return 0;
@@ -267,7 +268,7 @@ class DJDBFileCollection : DJDBCollection {
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_removeMany_select(col));
       assert(test_removeMany_select_allVersions(col));
     }
@@ -281,13 +282,15 @@ class DJDBFileCollection : DJDBCollection {
     return counter; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_removeMany_jselect(col));
       assert(test_removeMany_jselect_allVersions(col));
     }
   }
 
-  alias removeOne = DJDBCollection.removeOne;
+  /// Remove one item or one version from collection
+  alias removeOne = DJSBCollection.removeOne;
+  /// Remove one item from collection
   override bool removeOne(UUID id, bool allVersions = false) {
     if (!pathExists) return false;
 
@@ -300,11 +303,9 @@ class DJDBFileCollection : DJDBCollection {
     return false; } 
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_removeOne_id(col));
-      assert(test_removeOne_id_allVersions(col));
-    }
-  }
+      assert(test_removeOne_id_allVersions(col)); }}
 
   override bool removeOne(UUID id, size_t versionNumber) {
     if (!pathExists) return false;
@@ -320,10 +321,8 @@ class DJDBFileCollection : DJDBCollection {
     return (!pathToVersion.exists ? true : false); } 
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
-      assert(test_removeOne_id_versionNumber(col));
-    }
-  }
+      auto col = JSBFileCollection("./tests");
+      assert(test_removeOne_id_versionNumber(col)); }}
 
   override bool removeOne(STRINGAA select, bool allVersions = false) {
     if (!pathExists) return false;
@@ -348,11 +347,9 @@ class DJDBFileCollection : DJDBCollection {
     return false; }
   unittest { 
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_removeOne_select(col));
-      assert(test_removeOne_select_allVersions(col));
-    }
-  }
+      assert(test_removeOne_select_allVersions(col)); }}
 
   override bool removeOne(Json select, bool allVersions = false) {
     if (!pathExists) return false;
@@ -378,11 +375,9 @@ class DJDBFileCollection : DJDBCollection {
     return false; }
   unittest {
     version(uim_jsonbase) {
-      auto col = JDBFileCollection("./tests");
+      auto col = JSBFileCollection("./tests");
       assert(test_removeOne_jselect(col));
-      assert(test_removeOne_jselect_allVersions(col));
-    }
-  }
+      assert(test_removeOne_jselect_allVersions(col)); }}
 }
-auto JDBFileCollection() { return new DJDBFileCollection;  }
-auto JDBFileCollection(string newPath) { return new DJDBFileCollection(newPath); }
+auto JSBFileCollection() { return new DJSBFileCollection;  }
+auto JSBFileCollection(string newPath) { return new DJSBFileCollection(newPath); }

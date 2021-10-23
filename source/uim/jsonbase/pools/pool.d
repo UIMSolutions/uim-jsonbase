@@ -1,19 +1,51 @@
-module uim.jsonbase.pools.pool;
+module uim.jsonbase.tenants.tenant;
 
 @safe:
 import uim.jsonbase;
 
-class DJBPool {
+class DJBTenant {
   this() {}
 
-  protected DJDBCollection[string] _collections;
+  protected DJSBCollection[string] _collections;
   @property auto collections() { return _collections; }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
+  }
+  
+  /// Get names of existing collections
+  auto collectionNames() { return _collections.byKey.array; }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
+  }
 
-  DJDBCollection opIndex(string name) {
+  DJSBCollection opIndex(string name) {
     return _collections.get(name, null);
   }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
+  }
 
-  void opIndexAssign(string name, DJDBCollection newCollection) {
+  void opIndexAssign(string name, DJSBCollection newCollection) {
     _collections[name] = newCollection;
   }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
+  }
+
+  void clearCollections() {
+    _collections = null;
+  }
+  unittest {
+    version(uim_jsonbase) {
+      /// TODO
+    } 
+  }  
 }

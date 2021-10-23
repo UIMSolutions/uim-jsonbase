@@ -6,8 +6,9 @@ public import uim.oop;
 
 public import vibe.d;
 
+public import uim.jsonbase.bases;
 public import uim.jsonbase.collections;
-public import uim.jsonbase.pools;
+public import uim.jsonbase.tenants;
 public import uim.jsonbase.security;
 
 /* public import uim.jsonbase.helpers;
@@ -119,24 +120,6 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
   }
 // #endregion check
 
-Json toJson(UUID id, size_t versionNumber = 0) {
-  auto result = Json.emptyObject;
-
-  result["id"] = id.toString;
-  result["versionNumber"] = versionNumber > 0 ? versionNumber : 1;
-
-  return result; 
-}
-
-/* Json toJson(STRINGAA values) {
-  auto result = Json.emptyObject;
-
-  if ("id" in values) result["id"] = values["id"];
-  result["versionNumber"] = "versionNumber" in values ? to!size_t(values["versionNumber"]) : 1;
-
-  return result; 
-} */
-
 string dirPath(string path, UUID id, string separator = "/") {
   return path~dirPath(id, separator);
 }
@@ -177,5 +160,64 @@ string filePath(Json json, string separator = "/") {
     to!string(json["versionNumber"].get!long > 0 ? json["versionNumber"].get!long : 1) : "1")~".json";
 }
 
+Json lastVersion(Json[] jsons) {
+  Json result = Json(null);
+
+  if (jsons.length > 0) {
+    foreach(json; jsons) 
+      if (result == Json(null) && "versionNumber" in json) 
+        result = json; 
+    if (result != Json(null)) foreach(json; jsons) 
+      if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"].get!size_t) 
+        result = json; 
+  }
+
+  return result;
+}
+
+Json lastVersion(Json[size_t] jsons) {
+  Json result = Json(null);
+
+  if (jsons.length > 0) {
+    foreach(k, json; jsons) 
+      if (result == Json(null) && "versionNumber" in json) 
+        result = json; 
+    if (result != Json(null)) foreach(k, json; jsons) 
+      if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"].get!size_t) 
+        result = json; 
+  }
+  
+  return result;
+}
+
+Json oneVersion(Json[] jsons) {
+  Json result = Json(null);
+
+  if (jsons.length > 0) {
+    foreach(json; jsons) 
+      if (result == Json(null) && "versionNumber" in json) 
+        result = json; 
+    if (result != Json(null)) foreach(json; jsons) 
+      if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"].get!size_t) 
+        result = json; 
+  }
+
+  return result;
+}
+
+Json oneVersion(Json[size_t] jsons) {
+  Json result = Json(null);
+
+  if (jsons.length > 0) {
+    foreach(k, json; jsons) 
+      if (result == Json(null) && "versionNumber" in json) 
+        result = json; 
+    if (result != Json(null)) foreach(k, json; jsons) 
+      if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"].get!size_t) 
+        result = json; 
+  }
+  
+  return result;
+}
 
 
