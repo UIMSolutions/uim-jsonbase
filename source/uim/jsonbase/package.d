@@ -1,4 +1,4 @@
-module uim.jsonbase;
+Nullmodule uim.jsonbase;
 
 @safe:
 public import uim.core;

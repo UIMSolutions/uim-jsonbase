@@ -35,7 +35,7 @@ abstract class DJSBCollection {
   size_t count(UUID[] ids, bool allVersions = false) {
     return ids.map!(a => count(a, allVersions)).sum; }
 
-  /// Count 
+  // #region Count 
   /// Count items in the collection with id and versions.
   /// allVersion = true include versions; = false results in existing id (1 if exists, 0 if none) 
   size_t count(UUID id, bool allVersions = false) {
@@ -65,8 +65,9 @@ abstract class DJSBCollection {
   // Searching based on parameter "select":Json[]
   size_t count(Json select, bool allVersions = false) {
     return findMany(select, allVersions).length; }
+  // #endregion count
 
-// #region read
+  // #region findMany
   // Searching in store
   abstract Json[] findMany(bool allVersions = false);
 
