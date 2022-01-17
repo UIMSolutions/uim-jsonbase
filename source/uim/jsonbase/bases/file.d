@@ -24,3 +24,4 @@ class DJSBFileBase : DJSBBase {
 
 }
 auto JSBFileBase() { return new DJSBFileBase; }
+auto JSBFileBase(string newRootPath) { return JSBFileBase.rootPath(newRootPath); }

@@ -1,4 +1,4 @@
-Nullmodule uim.jsonbase;
+module uim.jsonbase;
 
 @safe:
 public import uim.core;
@@ -57,14 +57,13 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
   }
 
   bool checkVersion(Json value, STRINGAA selector) {
-    debug writeln("bool checkVersion(Json value, STRINGAA selector)");
-    if (!checkVersion(value)) return false; // Testing against null results in false
+    //  (!checkVersion(value)) return false; // Testing against null results in false
     if (selector.empty) return false; // Testing against null results in false
 
     foreach (key; selector.byKey) {      
-      debug writeln("-> "~key~"/"~selector[key]);
+      // debug writeln("-> "~key~"/"~selector[key]);
       if (key !in value) return false;
-      debug writeln("-> %s : %s".format(value[key].type, value[key]));
+      // debug writeln("-> %s : %s".format(value[key].type, value[key]));
       switch (value[key].type) {
         case Json.Type.string:
           if (value[key].get!string != selector[key]) return false;

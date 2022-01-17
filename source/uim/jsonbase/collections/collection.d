@@ -38,6 +38,9 @@ abstract class DJSBCollection {
   // #region Count 
   /// Count items in the collection with id and versions.
   /// allVersion = true include versions; = false results in existing id (1 if exists, 0 if none) 
+  size_t count(bool allVersions = false) {
+    return findMany(allVersions).length; }
+
   size_t count(UUID id, bool allVersions = false) {
     return findMany(id, allVersions).length; }
 

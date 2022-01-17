@@ -19,5 +19,10 @@ class DJSBBase {
   unittest {
     version(uim_jsonbase) {
       auto base = JSBBase; }}
+
+  auto tenantNames() { return _tenants.byKey.array; }
+  unittest {
+    version(uim_jsonbase) {
+      auto base = JSBBase; }}
 }
 auto JSBBase() { return new DJSBBase; }

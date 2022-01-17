@@ -6,8 +6,7 @@ import uim.jsonbase;
 class DJSBNullCollection : DJSBCollection {
   this() { super();  }
   
-  protected Json[size_t][UUID] _items;
-  
+  // #region FindMany
   alias findMany = DJSBCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) { return null; }
@@ -41,11 +40,13 @@ class DJSBNullCollection : DJSBCollection {
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(!col.findMany(Json(["name":"aName"]))); 
-      assert(!col.findMany(Json(["name":"aName"]), true)); 
+      assert(!col.findMany(toJson(["name":"aName"]))); 
+      assert(!col.findMany(toJson(["name":"aName"]), true)); 
       // TODO 
       }}
+  // #endregion findMany
 
+  // #region findOne
   alias findOne = DJSBCollection.findOne;
   override Json findOne(UUID id, bool allVersions = false) { return Json(null); }
   unittest {
@@ -64,219 +65,123 @@ class DJSBNullCollection : DJSBCollection {
       // TODO 
       }}
 
-  override Json findOne(STRINGAA select, bool allVersions = false) {
-    if (auto allItems = findMany(allVersions)) {    
-      foreach(oneItem; allItems) if (oneItem.checkVersion) return oneItem; }
-
-    return Json(null); }
+  override Json findOne(STRINGAA select, bool allVersions = false) { return Json(null); }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_findMany_select(col));
-      assert(test_findMany_select_allVersions(col)); }}
+      assert(col.findOne(["name":"aName"]) == Json(null));
+      assert(col.findOne(["name":"aName"], true) == Json(null));
+      // TODO 
+      }}
 
-  override Json findOne(Json select, bool allVersions = false) {
-    if (auto allItems = findMany(allVersions)) {    
-      foreach(oneItem; allItems) 
-        if (oneItem.checkVersion) return oneItem; }
-
-    return Json(null); }
+  override Json findOne(Json select, bool allVersions = false) { return Json(null); }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_findMany_jselect(col));
-      assert(test_findMany_jselect_allVersions(col)); }}
+      assert(col.findOne(toJson(["name":"aName"])) == Json(null));
+      assert(col.findOne(toJson(["name":"aName"]), true) == Json(null));
+      // TODO 
+      }}
+  // #endregion findOne
 
-  override Json insertOne(Json newData) {
-    if (newData == Json(null)) return Json(null);
-    auto id = "id" in newData ? UUID(newData["id"].get!string) : randomUUID;
-    auto versionNumber = "versionNumber" in newData ? newData["versionNumber"].get!size_t : 1UL;
-
-    if (id !in _items) _items[id] = null; 
-    _items[id][versionNumber] = newData; 
-
-    return findOne(newData); }  
+  // #region insertOne
+  override Json insertOne(Json newData) { return findOne(newData); }  
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_insertOne_data(col)); }}
+      assert(col.insertOne(toJson(["name":"aName"])) == Json(null));
+      // TODO 
+      }}
+  // #endregion insertOne
 
-  override size_t updateMany(Json select, Json updateData) {
-    size_t updates;
-    foreach(id; _items.byKey) {
-      foreach(vNumber; _items[id].byKey) {
-        if (!checkVersion(_items[id][vNumber], select)) continue;
-
-        updates++;
-        auto itemVersion = _items[id][vNumber];
-        foreach(kv; updateData.byKeyValue) {
-          if (kv.key == "id") continue;
-          if (kv.key == "versionNumber") continue;
-
-          itemVersion[kv.key] = kv.value; }
-        _items[id][vNumber] = itemVersion; }}
-    return updates; }
+  // #region updateMany
+  override size_t updateMany(Json select, Json updateData) { return 0; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_updateMany_select_data(col)); }}
+      assert(col.updateMany(toJson(["id":randomUUID.toString]), toJson(["name":"aName"])) == 0); 
+      // TODO
+      }}
+  // #endregion updateMany
 
-  override bool updateOne(Json select, Json updateData) {
-    foreach(id; _items.byKey) {
-      foreach(vNumber; _items[id].byKey) {
-        if (!checkVersion(_items[id][vNumber], select)) continue;
-
-        auto json = _items[id][vNumber]; 
-        foreach(kv; updateData.byKeyValue) {
-          if (kv.key == "id") continue;
-          if (kv.key == "versionNumber") continue;
-
-          json[kv.key] = kv.value; }
-        _items[id][vNumber] = json; 
-        return true; }}
-    return false; }
+  // #region updateOne
+  override bool updateOne(Json select, Json updateData) { return false; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_updateOne_select_data(col)); }}
+      assert(col.updateOne(toJson(["id":randomUUID.toString]), toJson(["name":"aName"])) == 0); 
+      // TODO
+      }}
+  // #endregion updateOne
 
+  // #region removeMany
   /// Remove items from collections
   alias removeMany = DJSBCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
-  override size_t removeMany(UUID id, bool allVersions = false) {
-    size_t result = 0;
-    if (id in _items) {
-      auto itemsId = _items[id];
-      if (allVersions) {
-        result = itemsId.length;
-        _items.remove(id); }
-      else {
-        auto lastVers = lastVersion(itemsId);
-        itemsId.remove(lastVers["versionNumber"].get!size_t);
-      }
-    }
-    return result; }
+  override size_t removeMany(UUID id, bool allVersions = false) { return 0; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_removeMany_id(col));
-      assert(test_removeMany_id_allVersions(col)); }}
+      assert(col.removeMany(randomUUID) == 0);
+      assert(col.removeMany(randomUUID, true) == 0);
+      // TODO
+      }}
 
-  override size_t removeMany(STRINGAA select, bool allVersions = false) {
-    size_t counter;
-
-    foreach(id, itemId; _items) {
-      if (allVersions) {
-        foreach(vNumber, item; itemId) {
-          if (checkVersion(item, select)) {
-            counter++;
-            _items[id].remove(vNumber); }}}
-      else {
-        if (auto item = lastVersion(itemId)) {
-          if (checkVersion(item, select)) {
-            counter++;
-            _items[id].remove(item["versionNumber"].get!size_t); }}}
-        if (_items[id].empty) _items.remove(id); }
-          
-    return counter; }
+  override size_t removeMany(STRINGAA select, bool allVersions = false) { return 0; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_removeMany_select(col));
-      assert(test_removeMany_select_allVersions(col)); }}
+      assert(col.removeMany(["name":"aName"]) == 0);
+      assert(col.removeMany(["name":"aName"], true) == 0);
+      // TODO
+      }}
 
-  override size_t removeMany(Json select, bool allVersions = false) {
-    size_t counter;
-
-    foreach(id, itemId; _items) {
-      if (allVersions) {
-        foreach(vNumber, item; itemId) {
-          if (checkVersion(item, select)) {
-            counter++;
-            _items[id].remove(vNumber); }}}
-      else {
-        if (auto item = lastVersion(itemId)) {
-          if (checkVersion(item, select)) {
-            counter++;
-            _items[id].remove(item["versionNumber"].get!size_t); }}}
-        if (_items[id].empty) _items.remove(id); }
-          
-    return counter; }
+  override size_t removeMany(Json select, bool allVersions = false) { return 0; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_removeMany_jselect(col));
-      assert(test_removeMany_jselect_allVersions(col)); }}
+      assert(col.removeMany(toJson(["name":"aName"])) == 0);
+      assert(col.removeMany(toJson(["name":"aName"]), true) == 0);
+      // TODO
+      }}
+  // #endregion removeMany
 
   /// Remove one item or one version from collection
   alias removeOne = DJSBCollection.removeOne;
   /// Remove based on id - allVersions:true - remove all, remove lastVersion 
-  override bool removeOne(UUID id, bool allVersions = false) {
-    if (id in _items) {
-      if (allVersions) {
-        _items.remove(id); 
-        return true; }
-      else {
-        foreach(vNumber; _items[id].byKey) {
-          _items[id].remove(vNumber);
-          return true; }}
-    }
-    return false; }
+  override bool removeOne(UUID id, bool allVersions = false) { return false; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_removeOne_id(col));
-      assert(test_removeOne_id_allVersions(col)); }}
-
-  override bool removeOne(UUID id, size_t versionNumber) {
-    if (auto itemsId = _items.get(id, null)) {
-      if (versionNumber in itemsId) {
-        _items[id].remove(versionNumber);
-        return true;
-        }}
-    return false; }
-  unittest {
-    version(uim_jsonbase) {
-      auto col = JSBNullCollection;
-      assert(test_removeOne_id_versionNumber(col)); }}
-
-  override bool removeOne(STRINGAA select, bool allVersions = false) {
-    if (auto allItems = findMany(allVersions)) {
-      foreach(oneItem; allItems) {
-        if ("id" !in oneItem) continue;
-        if ("versionNumber" !in oneItem) continue;
-
-        if (checkVersion(oneItem, select)) {
-          auto id = UUID(oneItem["id"].get!string);
-          auto vNumber = oneItem["versionNUmber"].get!size_t;
-          auto itemsId = _items[id];
-          itemsId.remove(vNumber); }
+      assert(!col.removeOne(randomUUID));
+      assert(!col.removeOne(randomUUID, true));
+      // TODO
       }}
-    return false; }
-  unittest { 
-    version(uim_jsonbase) {
-      auto col = JSBNullCollection;
-      assert(test_removeOne_select(col));
-      assert(test_removeOne_select_allVersions(col)); }}
 
-  override bool removeOne(Json select, bool allVersions = false) {
-    if (auto allItems = findMany(allVersions)) {
-      foreach(oneItem; allItems) if (checkVersion(oneItem, select)) {
-        if ("id" !in oneItem) continue;
-        if ("versionNumber" !in oneItem) continue;
-
-        if (checkVersion(oneItem, select)) {
-          auto id = UUID(oneItem["id"].get!string);
-          auto vNumber = oneItem["versionNUmber"].get!size_t;
-          auto itemsId = _items[id];
-          itemsId.remove(vNumber);
-        }        
-      }}
-    return false; }
+  override bool removeOne(UUID id, size_t versionNumber) { return false; }
   unittest {
     version(uim_jsonbase) {
       auto col = JSBNullCollection;
-      assert(test_removeOne_jselect(col));
-      assert(test_removeOne_jselect_allVersions(col)); }}
+      assert(!col.removeOne(randomUUID, 1));
+      // TODO
+      }}
+
+  override bool removeOne(STRINGAA select, bool allVersions = false) { return false; }
+  unittest {
+    version(uim_jsonbase) {
+      auto col = JSBNullCollection;
+      assert(!col.removeOne(["name": "aName"]));
+      assert(!col.removeOne(["name": "aName"], true));
+      // TODO
+      }}
+
+  override bool removeOne(Json select, bool allVersions = false) { return false; }
+  unittest {
+    version(uim_jsonbase) {
+      auto col = JSBNullCollection;
+      assert(!col.removeOne(toJson(["name": "aName"])));
+      assert(!col.removeOne(toJson(["name": "aName"]), true));
+      // TODO
+      }}
 }
 auto JSBNullCollection() { return new DJSBNullCollection;  }
