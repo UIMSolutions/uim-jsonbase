@@ -10,8 +10,8 @@ class DJSBNullCollection : DJSBCollection {
   alias findMany = DJSBCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) { return null; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;    
       // Results always null / []
       assert(!col.findMany); 
@@ -19,8 +19,8 @@ class DJSBNullCollection : DJSBCollection {
 
   /// Find all (many) items in a collection with id. allVersions:false = find last version, allVersion:true = find all versions
   override Json[] findMany(UUID id, bool allVersions = false) { return null; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.findMany(randomUUID)); 
       assert(!col.findMany(randomUUID, true)); 
@@ -28,8 +28,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override Json[] findMany(STRINGAA select, bool allVersions = false) { return null; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.findMany(["name":"aName"])); 
       assert(!col.findMany(["name":"aName"], true)); 
@@ -37,8 +37,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override Json[] findMany(Json select, bool allVersions = false) { return null; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.findMany(toJson(["name":"aName"]))); 
       assert(!col.findMany(toJson(["name":"aName"]), true)); 
@@ -49,8 +49,8 @@ class DJSBNullCollection : DJSBCollection {
   // #region findOne
   alias findOne = DJSBCollection.findOne;
   override Json findOne(UUID id, bool allVersions = false) { return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.findOne(randomUUID) == Json(null));
       assert(col.findOne(randomUUID, true) == Json(null)); 
@@ -58,16 +58,16 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override Json findOne(UUID id, size_t versionNumber) { return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.findOne(randomUUID, 1) == Json(null));
       // TODO 
       }}
 
   override Json findOne(STRINGAA select, bool allVersions = false) { return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.findOne(["name":"aName"]) == Json(null));
       assert(col.findOne(["name":"aName"], true) == Json(null));
@@ -75,8 +75,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override Json findOne(Json select, bool allVersions = false) { return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.findOne(toJson(["name":"aName"])) == Json(null));
       assert(col.findOne(toJson(["name":"aName"]), true) == Json(null));
@@ -86,8 +86,8 @@ class DJSBNullCollection : DJSBCollection {
 
   // #region insertOne
   override Json insertOne(Json newData) { return findOne(newData); }  
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.insertOne(toJson(["name":"aName"])) == Json(null));
       // TODO 
@@ -96,8 +96,8 @@ class DJSBNullCollection : DJSBCollection {
 
   // #region updateMany
   override size_t updateMany(Json select, Json updateData) { return 0; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.updateMany(toJson(["id":randomUUID.toString]), toJson(["name":"aName"])) == 0); 
       // TODO
@@ -106,8 +106,8 @@ class DJSBNullCollection : DJSBCollection {
 
   // #region updateOne
   override bool updateOne(Json select, Json updateData) { return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.updateOne(toJson(["id":randomUUID.toString]), toJson(["name":"aName"])) == 0); 
       // TODO
@@ -119,8 +119,8 @@ class DJSBNullCollection : DJSBCollection {
   alias removeMany = DJSBCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) { return 0; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.removeMany(randomUUID) == 0);
       assert(col.removeMany(randomUUID, true) == 0);
@@ -128,8 +128,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override size_t removeMany(STRINGAA select, bool allVersions = false) { return 0; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.removeMany(["name":"aName"]) == 0);
       assert(col.removeMany(["name":"aName"], true) == 0);
@@ -137,8 +137,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override size_t removeMany(Json select, bool allVersions = false) { return 0; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(col.removeMany(toJson(["name":"aName"])) == 0);
       assert(col.removeMany(toJson(["name":"aName"]), true) == 0);
@@ -150,8 +150,8 @@ class DJSBNullCollection : DJSBCollection {
   alias removeOne = DJSBCollection.removeOne;
   /// Remove based on id - allVersions:true - remove all, remove lastVersion 
   override bool removeOne(UUID id, bool allVersions = false) { return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.removeOne(randomUUID));
       assert(!col.removeOne(randomUUID, true));
@@ -159,16 +159,16 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override bool removeOne(UUID id, size_t versionNumber) { return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.removeOne(randomUUID, 1));
       // TODO
       }}
 
   override bool removeOne(STRINGAA select, bool allVersions = false) { return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.removeOne(["name": "aName"]));
       assert(!col.removeOne(["name": "aName"], true));
@@ -176,8 +176,8 @@ class DJSBNullCollection : DJSBCollection {
       }}
 
   override bool removeOne(Json select, bool allVersions = false) { return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBNullCollection;
       assert(!col.removeOne(toJson(["name": "aName"])));
       assert(!col.removeOne(toJson(["name": "aName"]), true));

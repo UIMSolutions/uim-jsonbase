@@ -20,8 +20,8 @@ class DJSBMemCollection : DJSBCollection {
           results ~= allVersions ? itemsId.byValue.array : [lastVersion(itemsId)]; }}
 
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;      
       assert(test_findMany(col));
       assert(test_findMany_allVersions(col)); }}
@@ -34,8 +34,8 @@ class DJSBMemCollection : DJSBCollection {
       if (!item.empty) results = allVersions ? item.byValue.array : [lastVersion(item)]; }
 
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findMany_id(col));
       assert(test_findMany_id_allVersions(col));
@@ -50,8 +50,8 @@ class DJSBMemCollection : DJSBCollection {
         if (checkVersion(item, select)) results ~= item; }}
 
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col)); }}
@@ -64,8 +64,8 @@ class DJSBMemCollection : DJSBCollection {
         if (checkVersion(item, select)) results ~= item; }}
 
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col)); }}
@@ -78,8 +78,8 @@ class DJSBMemCollection : DJSBCollection {
       if (!item.empty) result = allVersions ? item.byValue.array[0] : lastVersion(item); }
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findOne_id(col));
       assert(test_findOne_id_allVersions(col)); }}
@@ -91,8 +91,8 @@ class DJSBMemCollection : DJSBCollection {
       if (versionNumber in item) result = item[versionNumber]; }
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findOne_id_versionNumber(col)); }}
 
@@ -101,8 +101,8 @@ class DJSBMemCollection : DJSBCollection {
       foreach(oneItem; allItems) if (oneItem.checkVersion) return oneItem; }
 
     return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col)); }}
@@ -113,8 +113,8 @@ class DJSBMemCollection : DJSBCollection {
         if (oneItem.checkVersion) return oneItem; }
 
     return Json(null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col)); }}
@@ -128,8 +128,8 @@ class DJSBMemCollection : DJSBCollection {
     _items[id][versionNumber] = newData; 
 
     return findOne(newData); }  
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_insertOne_data(col)); }}
 
@@ -148,8 +148,8 @@ class DJSBMemCollection : DJSBCollection {
           itemVersion[kv.key] = kv.value; }
         _items[id][vNumber] = itemVersion; }}
     return updates; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_updateMany_select_data(col)); }}
 
@@ -167,8 +167,8 @@ class DJSBMemCollection : DJSBCollection {
         _items[id][vNumber] = json; 
         return true; }}
     return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_updateOne_select_data(col)); }}
 
@@ -188,8 +188,8 @@ class DJSBMemCollection : DJSBCollection {
       }
     }
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeMany_id(col));
       assert(test_removeMany_id_allVersions(col)); }}
@@ -211,8 +211,8 @@ class DJSBMemCollection : DJSBCollection {
         if (_items[id].empty) _items.remove(id); }
           
     return counter; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeMany_select(col));
       assert(test_removeMany_select_allVersions(col)); }}
@@ -234,8 +234,8 @@ class DJSBMemCollection : DJSBCollection {
         if (_items[id].empty) _items.remove(id); }
           
     return counter; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeMany_jselect(col));
       assert(test_removeMany_jselect_allVersions(col)); }}
@@ -254,8 +254,8 @@ class DJSBMemCollection : DJSBCollection {
           return true; }}
     }
     return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeOne_id(col));
       assert(test_removeOne_id_allVersions(col)); }}
@@ -267,8 +267,8 @@ class DJSBMemCollection : DJSBCollection {
         return true;
         }}
     return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeOne_id_versionNumber(col)); }}
 
@@ -305,8 +305,8 @@ class DJSBMemCollection : DJSBCollection {
         }        
       }}
     return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBMemCollection;
       assert(test_removeOne_jselect(col));
       assert(test_removeOne_jselect_allVersions(col)); }}

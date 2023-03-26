@@ -36,8 +36,8 @@ class DJSBFileCollection : DJSBCollection {
       if (id.isUUID) results ~= findMany(UUID(id), allVersions);
     }
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findMany(col));
       assert(test_findMany_allVersions(col));
@@ -60,8 +60,8 @@ class DJSBFileCollection : DJSBCollection {
       if (j != Json(null) && "name" in j) 
         debug std.stdio.write(j["name"].get!string, "\t"); */
     return results; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findMany_id(col));
       assert(test_findMany_id_allVersions(col));
@@ -70,8 +70,8 @@ class DJSBFileCollection : DJSBCollection {
 
   override Json[] findMany(STRINGAA select, bool allVersions = false) {
     return super.findMany(select, allVersions); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col));
@@ -81,8 +81,8 @@ class DJSBFileCollection : DJSBCollection {
   /// find items by select - allVersions:false - last versions; allVersions:true - all versions
   override Json[] findMany(Json select, bool allVersions = false) {
     return super.findMany(select, allVersions); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col));
@@ -104,8 +104,8 @@ class DJSBFileCollection : DJSBCollection {
         result = allVersions ? allEntityVersions[0] : lastVersion(allEntityVersions); }}
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findOne_id(col));
       assert(test_findOne_id_allVersions(col));
@@ -123,8 +123,8 @@ class DJSBFileCollection : DJSBCollection {
         result = loadJson(pathToVersion); }}
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findOne_id_versionNumber(col)); }}
 
@@ -140,8 +140,8 @@ class DJSBFileCollection : DJSBCollection {
       result = jsons ? jsons[0] : Json(null); }
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findOne_select(col));
       assert(test_findOne_select_allVersions(col));
@@ -160,8 +160,8 @@ class DJSBFileCollection : DJSBCollection {
       result = jsons ? jsons[0] : Json(null); }
 
     return result; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_findOne_jselect(col));
       assert(test_findOne_jselect_allVersions(col));
@@ -183,8 +183,8 @@ class DJSBFileCollection : DJSBCollection {
     auto pathToVersion = filePath(path, newData);
     std.file.write(pathToVersion, newData.toString);
     return findOne(newData); }  
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_insertOne_data(col));
     }
@@ -203,8 +203,8 @@ class DJSBFileCollection : DJSBCollection {
       std.file.write(filePath(path, json, pathSeparator), json.toString);
     }
     return jsons.length; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_updateMany_select_data(col));
     }
@@ -223,8 +223,8 @@ class DJSBFileCollection : DJSBCollection {
       std.file.write(filePath(path, json, pathSeparator), json.toString);
     }
     return jsons.length; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_updateMany_select_data(col));
     }
@@ -239,8 +239,8 @@ class DJSBFileCollection : DJSBCollection {
     foreach(kv; updateData.byKeyValue) json[kv.key] = kv.value;  
     std.file.write(filePath(path, json, pathSeparator), json.toString);
     return true; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_updateOne_select_data(col));
     }
@@ -258,8 +258,8 @@ class DJSBFileCollection : DJSBCollection {
       removeOne(item, allVersions); }
 
     return counter; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeMany_id(col));
       assert(test_removeMany_id_allVersions(col)); }}
@@ -270,8 +270,8 @@ class DJSBFileCollection : DJSBCollection {
     size_t counter;
     foreach(json; findMany(select, allVersions)) counter += removeOne(json, allVersions);
     return counter; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeMany_select(col));
       assert(test_removeMany_select_allVersions(col));
@@ -284,8 +284,8 @@ class DJSBFileCollection : DJSBCollection {
     size_t counter;
     foreach(json; findMany(select, allVersions)) counter += removeOne(json, allVersions);
     return counter; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeMany_jselect(col));
       assert(test_removeMany_jselect_allVersions(col));
@@ -305,8 +305,8 @@ class DJSBFileCollection : DJSBCollection {
       return !jPath.exists; }
 
     return false; } 
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeOne_id(col));
       assert(test_removeOne_id_allVersions(col)); }}
@@ -323,8 +323,8 @@ class DJSBFileCollection : DJSBCollection {
     pathToVersion.remove;
     if (fileNames(pathToId, true).empty) pathToId.remove;
     return (!pathToVersion.exists ? true : false); } 
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeOne_id_versionNumber(col)); }}
 
@@ -377,8 +377,8 @@ class DJSBFileCollection : DJSBCollection {
     auto json = findOne(select, allVersions); 
     if (json != Json(null)) return removeOne(json, false); 
     return false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto col = JSBFileCollection("./tests");
       assert(test_removeOne_jselect(col));
       assert(test_removeOne_jselect_allVersions(col)); }}

@@ -23,20 +23,15 @@ class DJBFileTenant : DJBTenant {
     }}
 
     return cast(O)this; }
-  unittest {
-    version(uim_jsonbase) {
-      /// TODO
-    } 
-  }
 }
 auto JBFileTenant() { return new DJBFileTenant; }
 auto JBFileTenant(string newRootPath) { return new DJBFileTenant(newRootPath); }
 
-unittest {
+version(test_uim_jsonbase) { unittest {
   auto tenant = JBFileTenant("/home/oz/Documents/PROJECTS/DATABASES/uim/uim");
   tenant.rootPath("/home/oz/Documents/PROJECTS/DATABASES/uim/central");
    
   foreach(colName, col; tenant.collections) {
     writeln(colName, "\t->\t", (cast(DJSBFileCollection)col).path, "\t->\t", col.findMany.length);
   }
-}
+}}

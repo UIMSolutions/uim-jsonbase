@@ -3,8 +3,9 @@ module uim.jsonbase;
 @safe:
 public import uim.core;
 public import uim.oop;
+public import uim.models;
 
-public import vibe.d;
+public import vibe.data.json;
 
 public import uim.jsonbase.bases;
 public import uim.jsonbase.collections;
@@ -77,21 +78,8 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
   }
   unittest {
     auto json = parseJsonString(`{"a":"b", "c":{"d":1}, "e":["f", {"g":"h"}], "i":1}`);
-    assert(checkVersion(json, ["a":"b"]), "Wrong CheckVersion result. Should be true -> %s for %s using %s".format(checkVersion(json, ["a":"b"]), json, ["a":"b"]));
-
-/*     auto selector = ["a":"b"];
-    foreach (key; selector.byKey) {  
-      writeln("key -> ", key);    
-      if (key !in json) writeln("(key !in json)"); else writeln("(key in json)");
-      switch (json[key].type) {
-        case Json.Type.string:
-          if (json[key].get!string != selector[key]) writeln("(json[key].get!string != selector[key])"); else writeln("(json[key].get!string == selector[key])");
-          break;
-        default:
-          if (json[key].toString != selector[key]) writeln("(json[key].toString != selector[key])"); else writeln("(json[key].toString == selector[key])");
-          break;
-      }
-    } */
+/*     assert(checkVersion(json, ["a":"b"]), 
+      "Wrong CheckVersion result. Should be true -> %s for %s using %s".format(checkVersion(json, ["a":"b"]), json, ["a":"b"])); */
 
     assert(checkVersion(json, ["a":"b", "i":"1"]));
     assert(!checkVersion(json, ["a":"y"]));

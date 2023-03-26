@@ -1,58 +1,28 @@
 {
+	"name": "uim-jsonbase",
+	"description": "Json Database library",
 	"authors": [
-		"UI Manufaktur Team"
+		"Sicherheitsschmiede",
+		"Ozan Nurettin Süel"
 	],
-	"copyright": "Copyright © 2017-2021, UI Manufaktur UG",
+	"copyright": "Copyright © 2015-2023, Ozan Nurettin Süel",	
+	"license": "Apache-2.0",
+	"targetType": "library",
 	"dependencies": {
 		"colored": "~>0.0.23",
 		"silly": "~>1.1.1",
-		"vibe-d": "0.9.4"
+		"vibe-d": "~>0.9.5"
 	},
-	"description": "Json Database library",
-	"license": "MIT",
-	"name": "uim-jsonbase",
-	"targetType": "library",
-	"configurations": [
-		{
-			"name": "offline",
-			"importPaths": [
-				"../uim-core",
-				"../uim-oop",
-				"./"
-			],
-			"sourcePaths": [
-				"../uim-core",
-				"../uim-oop",
-				"./"
-			]		
-		},
-		{
-			"name": "uim_jsonbase",
-			"versions": ["uim_jsonbase"],
-			"importPaths": [
-				"../uim-core",
-				"../uim-oop",
-				"./"
-			],
-			"sourcePaths": [
-				"../uim-core",
-				"../uim-oop",
-				"./"
-			]		
-		},
-		{
-			"name": "online",
-			"dependencies": {
-				"vibe-d": "==0.9.4",
-				"uim-core": {
-					"repository":"git+https://github.com/UI-Manufaktur/uim-core.git",
-					"version":"9171179266f02bafce9b9d7cba01f97354d01a59"
-				},
-				"uim-oop": {
-						"repository": "git+https://github.com/UI-Manufaktur/uim-oop.git",
-						"version": "a6fb933896b9864243e4455e61c77bc07f2b96e4"
-				}	
-			}
-		}
+	"sourcePaths": [
+		"../uim-core",
+		"../uim-oop",
+		"../uim-models",
+		"./"
+	],
+	"importPaths": [
+		"../uim-core",
+		"../uim-oop",
+		"../uim-models",
+		"./"
 	]
 }

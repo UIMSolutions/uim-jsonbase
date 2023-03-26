@@ -10,19 +10,19 @@ class DJSBBase {
 
   bool tenantExist(string tenantName) {
     return tenantName in _tenants ? true : false; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto base = JSBBase; }}
 
   DJBTenant opIndex(string tenantName) {
     return _tenants.get(tenantName, null); }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto base = JSBBase; }}
 
   auto tenantNames() { return _tenants.byKey.array; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto base = JSBBase; }}
 }
 auto JSBBase() { return new DJSBBase; }

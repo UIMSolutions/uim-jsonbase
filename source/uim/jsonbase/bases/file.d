@@ -18,8 +18,8 @@ class DJSBFileBase : DJSBBase {
         _tenants[dir] = JBFileTenant(newRootPath~"/"~dir);
       }}
     return cast(O)this; }
-  unittest {
-    version(uim_jsonbase) {
+  version(test_uim_jsonbase) { unittest {
+    
       auto base = JSBFileBase; }}
 
 }
