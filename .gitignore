@@ -22,3 +22,8 @@ docs/
 
 # Code coverage
 *.lst
+uim-jsonbase-test-default
+uim-jsonbase-test-library
+uim-jsonbase-test-offline
+uim-jsonbase-test-uim_jsonbase
+uim-jsonbase-test-uim-jsonbase
