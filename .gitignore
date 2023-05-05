@@ -1,15 +1,24 @@
+# Compiled Object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+
+# DUB
 .dub
 docs.json
 __dummy.html
 docs/
-/uim-jsonbase
-uim-jsonbase.so
-uim-jsonbase.dylib
-uim-jsonbase.dll
-uim-jsonbase.a
-uim-jsonbase.lib
-uim-jsonbase-test-*
-*.exe
-*.o
-*.obj
+
+# Code coverage
 *.lst
