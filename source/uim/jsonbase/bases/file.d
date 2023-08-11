@@ -6,22 +6,48 @@ import uim.jsonbase;
 class DJSBFileBase : DJSBBase {
   this() {}
   this(string newRootPath) {
-    this(); this.rootPath(newRootPath); }
+    this(); this.rootPath(newRootPath); 
+  }
 
-  protected string _rootPath;
-  @property O rootPath(this O)(string newRootPath) {
-    _rootPath = newRootPath;
+  mixin(TProperty!("string", "rootPath"));
 
-    if (_rootPath.exists) { 
-      auto dirs = dirNames(newRootPath);  
-      foreach(dir; dirs) {
-        _tenants[dir] = JBFileTenant(newRootPath~"/"~dir);
-      }}
-    return cast(O)this; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto base = JSBFileBase; }}
+  void load() {
+    IFilesystem myFilesystem;
+    version(Windows) {
+      myFilesystem = WindowsFilesystem;
+    }
+    version(linux) {
+      myFilesystem = LinuxFilesystem;
+    }
 
+    if (auto rootFolder = myFilesystem.folder(rootPath)) {
+      auto folders = rootFolder.folders;
+      folders.each!(f => writeln(f.name));
+/*       auto dirs = dirNames(rootPath);  
+      debug writeln(__MODULE__~" - found dirs ", dirs);
+
+      foreach(myDir; dirs) {
+        debug writeln(__MODULE__~" - Read "~myDir);
+        _tenants[myDir] = JBFileTenant(rootPath~"/"~myDir);
+      }      
+ */    
+    }
+  }
 }
 auto JSBFileBase() { return new DJSBFileBase; }
 auto JSBFileBase(string newRootPath) { return JSBFileBase.rootPath(newRootPath); }
+
+unittest {
+   IFilesystem myFilesystem;
+    version(Windows) {
+      myFilesystem = WindowsFilesystem;
+    }
+    version(linux) {
+      myFilesystem = LinuxFilesystem;
+    }
+
+    if (auto rootFolder = myFilesystem.folder(".")) {
+      auto folders = rootFolder.folders;
+      folders.each!(f => writeln(f.name));
+    }
+}

@@ -24,8 +24,9 @@ class DJSBFileCollection : DJSBCollection {
   alias findMany = DJSBCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
-    // debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1)");
-    Json[] results;
+    debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1)");
+    
+    Json[] results;    
     if (!pathExists) return results;
     // debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1) - Path existst");
 
