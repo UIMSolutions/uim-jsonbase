@@ -5,7 +5,11 @@ import uim.jsonbase;
 
 class DJSBFileCollection : DJSBCollection {
   this() { super();  }
-  this(string newPath) { this().path(newPath); }
+  this(IFolder aFolder) { this(); folder(aFolder); }
+  
+  mixin(TProperty!("IFolder", "folder"));
+
+  /* this(string newPath) { this().path(newPath); }
   
   protected string _pathSeparator = "/";
   @property auto pathSeparator() { return _pathSeparator; } 
@@ -18,165 +22,131 @@ class DJSBFileCollection : DJSBCollection {
   @property void path(string newPath) {
     _pathExists = newPath.exists && newPath.isDir;
     _path = pathExists ? newPath : ""; } 
+ */
 
-
-  /// find many items 
+  // find many items 
   alias findMany = DJSBCollection.findMany;
-  /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
+
+  // Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
-    debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1)");
-    
-    Json[] results;    
-    if (!pathExists) return results;
-    // debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1) - Path existst");
+    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(bool allVersions)");
+        
+    if (!folder || !folder.exists) { return null; }    
+    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(bool allVersions) - Path exists");
 
-    auto ids = dirNames(path, false);    
-    // debug writeln(moduleName!DJSBCollection~":DJSBCollection::findMany(1) - Found ids = ", ids.length);
+    auto ids = folder.folders.map!(f => folder.name).filter!(id => id.isUUID).array; // get all valid ids
+    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(1) - Found ids = ", ids.length);
 
-    foreach(id; ids) {
-      if (id.isUUID) results ~= findMany(UUID(id), allVersions);
-    }
-    return results; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findMany(col));
-      assert(test_findMany_allVersions(col));
-    }
+    return ids.map!(id => findMany(UUID(id), allVersions)).join();
   }
 
   /// Find all (many) items in a collection with id. allVersions:false = find last version, allVersion:true = find all versions
-  override Json[] findMany(UUID id, bool allVersions = false) {
-    Json[] results;
+  override Json[] findMany(UUID anId, bool allVersions = false) {
+    if (!folder || !folder.exists) { return null; }  
 
-    if (pathExists) {   
-      const pathToId = dirPath(path, id);
-      if (!pathToId.exists) return null; 
+    auto idFolder = folder.folder(anId);
+    if (idFolder is null) { return null; }  
 
-      auto versions = loadJsonsFromDirectory(pathToId);
-      if (versions) results = allVersions ? versions : [lastVersion(versions)]; 
-      else results = null; }
+    auto versionJsons = loadJsonsFromDirectory(idFolder.absolutePath);
+    if (versionJsons.isEmpty)  { return null; }
 
-    /* foreach(j; results) 
-      if (j != Json(null) && "name" in j) 
-        debug std.stdio.write(j["name"].get!string, "\t"); */
-    return results; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findMany_id(col));
-      assert(test_findMany_id_allVersions(col));
-    }
+    return allVersions ? versionJsons : [lastVersion(versionJsons)]; 
   }
 
   override Json[] findMany(STRINGAA select, bool allVersions = false) {
-    return super.findMany(select, allVersions); }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findMany_select(col));
-      assert(test_findMany_select_allVersions(col));
-    }
+    return super.findMany(select, allVersions); 
   }
 
   /// find items by select - allVersions:false - last versions; allVersions:true - all versions
   override Json[] findMany(Json select, bool allVersions = false) {
-    return super.findMany(select, allVersions); }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findMany_jselect(col));
-      assert(test_findMany_jselect_allVersions(col));
-    }
+    return super.findMany(select, allVersions); 
   }
 
   /// find one item 
   alias findOne = DJSBCollection.findOne;
+
   /// Find one item in a collection. allVersions:false = last version, allVersion:true = one version
   override Json findOne(UUID id, bool allVersions = false) {
-    auto result = Json(null); 
+    if (!folder || !folder.exists) { return Json(null); }  
 
-    if (pathExists) {
-      auto pathToId = dirPath(path, id, pathSeparator);
-      if (pathToId.exists) {
-        auto allEntityVersions = loadJsonsFromDirectory(pathToId);
-        if (allEntityVersions.empty) return Json(null); 
-        
-        result = allVersions ? allEntityVersions[0] : lastVersion(allEntityVersions); }}
+    auto idFolder = folder.folder(id.toString);
+    if (idFolder is null) { return Json(null); }  
 
-    return result; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findOne_id(col));
-      assert(test_findOne_id_allVersions(col));
-    }
+    auto versionJsons = loadJsonsFromDirectory(idFolder.absolutePath);
+    if (versionJsons.isEmpty)  { return null; }
+
+    return allVersions ? versionJsons[0] : lastVersion(versionJsons); 
   }
 
   override Json findOne(UUID id, size_t versionNumber) {
-    auto result = Json(null); 
+    if (!folder || !folder.exists) { return Json(null); } 
 
-    if (pathExists) {      
-      auto pathToId = dirPath(path, id, pathSeparator);
-      if (pathToId.exists) {
-        auto pathToVersion = filePath(path, toJson(id, versionNumber), pathSeparator);
-        if (!pathToVersion.exists) return Json(null); 
-        result = loadJson(pathToVersion); }}
+    auto idFolder = folder.folder(id.toString);
+    if (idFolder is null) { return Json(null); }  
 
-    return result; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findOne_id_versionNumber(col)); }}
+    auto versionFile = folder.file(to!string(versionNumber));
+    if (versionFile is null) { return Json(null); }  
+
+    return loadJson(versionFile.absolutePath); 
+  }
 
   override Json findOne(STRINGAA select, bool allVersions = false) {
-    auto result = Json(null); 
+    if (!folder || !folder.exists) return Json(null);
 
-    if (pathExists) {    
-      if ("id" in select) {
-        if ("versionNumber" !in select) return findOne(UUID(select["id"]), allVersions);
-        else return findOne(UUID(select["id"]), to!size_t(select["versionNumber"])); }
-
+    if (allVersions) {
       auto jsons = findMany(select, allVersions);
-      result = jsons ? jsons[0] : Json(null); }
+      return jsons ? jsons[0] : Json(null); 
+    } 
 
-    return result; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findOne_select(col));
-      assert(test_findOne_select_allVersions(col));
-    }
+    if ("id" !in select) { return Json(null); } 
+    auto myId = UUID(select["id"]);
+
+    auto idFolder = folder.folder(id.toString);
+    if (idFolder is null) { return Json(null); }  
+
+    auto result = Json(null); 
+    if (!folder || !folder.exists) { return Json(null); } 
+
+    return ("versionNumber" !in select 
+      ? findOne(UUID(select["id"]), allVersions);
+      : findOne(UUID(select["id"]), to!size_t(select["versionNumber"]))); 
   }
 
   override Json findOne(Json select, bool allVersions = false) {
-    auto result = Json(null); 
+    if (!folder || !folder.exists) return Json(null);
 
-    if (pathExists) {
-      if ("id" in select) {
-        if ("versionNumber" !in select) return findOne(UUID(select["id"].get!string), allVersions);
-        else return findOne(UUID(select["id"].get!string), select["versionNumber"].get!size_t); }
-
+    if (allVersions) {
       auto jsons = findMany(select, allVersions);
-      result = jsons ? jsons[0] : Json(null); }
-
-    return result; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_findOne_jselect(col));
-      assert(test_findOne_jselect_allVersions(col));
+      return jsons ? jsons[0] : Json(null); 
     }
+    if ("id" !in select) { return Json(null); }
+
+    auto idFolder = folder.folder(id);
+    if (idFolder is null) { return Json(null); }  
+
+    if ("versionNumber" !in select) { return Json(null); }
+
+    auto versionFile = folder.file(to!string(versionNumber));
+    if (versionFile is null) { return Json(null); }  
+
+    return versionFile.content;
   }
 
-  /// find one item 
+  /// insert one item 
   alias insertOne = DJSBCollection.insertOne;
-  override Json insertOne(Json newData) {
-    auto result = Json(null); 
 
-    if (newData == Json(null)) return result;
+  override Json insertOne(Json newData) {
+    if (!folder || !folder.exists) return Json(null);
+
+    if (newData == Json(null)) return Json(null);
     if ("id" !in newData) newData["id"] = randomUUID.toString;
     if ("versionNumber" !in newData) newData["versionNumber"] = 1;
+
+    folder.createFolder(newData["id"].get!string);
+    if (idFolder is null) { return Json(null); }  
+    
+    auto result = Json(null); 
+
 
     auto pathToId = dirPath(path, newData);
     if (!pathToId.exists) pathToId.mkdir;
@@ -192,7 +162,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override size_t updateMany(STRINGAA select, STRINGAA updateData) {
-    if (!pathExists) return 0;
+    if (!folder || !folder.exists) { return 0; }  
 
     auto jsons = findMany(select); 
     foreach(json; jsons) {
@@ -212,7 +182,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override size_t updateMany(Json select, Json updateData) {
-    if (!pathExists) return 0;
+    if (!folder || !folder.exists) { return 0; }  
 
     auto jsons = findMany(select); 
     foreach(json; jsons) {
@@ -232,157 +202,134 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override bool updateOne(Json select, Json updateData) {
-    if (!pathExists) return false;
+    if (!folder || !folder.exists) { return false; }  
 
     auto json = findOne(select);
     if (json == Json(null)) return false;
 
-    foreach(kv; updateData.byKeyValue) json[kv.key] = kv.value;  
+    updateData.byKeyValue.each!(kv => json[kv.key] = kv.value);
     std.file.write(filePath(path, json, pathSeparator), json.toString);
-    return true; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_updateOne_select_data(col));
-    }
+
+    return true; 
   }
 
   /// Remove items from collections
   alias removeMany = DJSBCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) {
-    if (!pathExists) return 0;
+    if (!folder || !folder.exists) { return 0; }  
 
     size_t counter;
     foreach(item; findMany(id, allVersions)) {
       counter++; 
       removeOne(item, allVersions); }
 
-    return counter; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeMany_id(col));
-      assert(test_removeMany_id_allVersions(col)); }}
+    return counter; 
+  }
 
   override size_t removeMany(STRINGAA select, bool allVersions = false) {
-    if (!pathExists) return 0;
+    if (!folder || !folder.exists) { return 0; }  
 
     size_t counter;
-    foreach(json; findMany(select, allVersions)) counter += removeOne(json, allVersions);
-    return counter; }
-  version(test_uim_jsonbase) { unittest {
+    findMany(select, allVersions).each!(json => counter += removeOne(json, allVersions));
     
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeMany_select(col));
-      assert(test_removeMany_select_allVersions(col));
-    }
+    return counter; 
   }
 
   override size_t removeMany(Json select, bool allVersions = false) {
-    if (!pathExists) return 0;
+    if (!folder || !folder.exists) { return 0; }  
 
     size_t counter;
-    foreach(json; findMany(select, allVersions)) counter += removeOne(json, allVersions);
-    return counter; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeMany_jselect(col));
-      assert(test_removeMany_jselect_allVersions(col));
-    }
+    findMany(select, allVersions).each!(json => counter += removeOne(json, allVersions));
+
+    return counter;
   }
 
   /// Remove one item or one version from collection
   alias removeOne = DJSBCollection.removeOne;
   /// Remove one item from collection
   override bool removeOne(UUID id, bool allVersions = false) {
-    if (!pathExists) return false;
+    if (!folder || !folder.exists) { return false; }  
 
     auto json = findOne(id, allVersions); 
-    if (json != Json(null)) {
-      auto jPath = filePath(path, json, pathSeparator);
-      jPath.remove;
-      return !jPath.exists; }
+    if (json == Json(null)) { return false; }
 
-    return false; } 
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeOne_id(col));
-      assert(test_removeOne_id_allVersions(col)); }}
+    auto jPath = filePath(path, json, pathSeparator);
+    jPath.remove;
+
+    return !jPath.exists; }
+  }
 
   override bool removeOne(UUID id, size_t versionNumber) {
-    if (!pathExists) return false;
+    if (!folder || !folder.exists) { return false; }  
 
-    auto pathToId = dirPath(path, id, pathSeparator);
-    if (!pathToId.exists) return false;
+    if (auto idFolder = folder.folder(id)) {
+      if (auto versionFile = idFolder(versionNumber)) {
+        versionFile.delete_;
+        if (idFolder.empty) idFolder.delete_;
+        
+        return (!versionFile.exists); 
+      }
+    }
 
-    auto pathToVersion = filePath(path, id, versionNumber, pathSeparator);
-    if (!pathToId.exists) return false;
-
-    pathToVersion.remove;
-    if (fileNames(pathToId, true).empty) pathToId.remove;
-    return (!pathToVersion.exists ? true : false); } 
-  version(test_uim_jsonbase) { unittest {
-    
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeOne_id_versionNumber(col)); }}
+    return false;
+  } 
 
   override bool removeOne(STRINGAA select, bool allVersions = false) {
-    if (!pathExists) return false;
+    if (!folder || !folder.exists) return Json(null);
 
-    if ("id" in select) {
-      auto id = UUID(select["id"]);
-      auto pathToId = dirPath(path, id, pathSeparator);
-      if (!pathToId.exists) return false;
-
-      if ("versionNumber" in select) {
-        auto versionNumber = to!size_t(select["versionNumber"]);
-        auto pathToVersion = filePath(path, id, versionNumber, pathSeparator);
-        if (!pathToId.exists) return false;
-
-        pathToVersion.remove;
-        if (fileNames(pathToId, true).empty) pathToId.remove;
-        return (!pathToVersion.exists ? true : false); 
-      }
+    if (allVersions) { 
+      auto json = findOne(select, allVersions); 
+      if (json == Json(null)) { return false; } 
+      
+      return removeOne(json, false);
     }
-    auto json = findOne(select, allVersions); 
-    if (json != Json(null)) return removeOne(json, false);
-    return false; }
-  unittest { 
-    version(uim_jsonbase) {
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeOne_select(col));
-      assert(test_removeOne_select_allVersions(col)); }}
+
+    if ("id" !in select) { return false; }
+    auto myId = UUID(select["id"]);
+
+    auto idFolder = folder.folder(myId);
+    if (idFolder is null) { return false; }
+
+    if ("versionNumber" !in select) { return false; }
+    auto versionNumber = to!size_t(select["versionNumber"]);
+    
+    auto versionFile = idFolder(versionNumber);
+    if (versionFile is null) { return false; }
+
+    versionFile.delete_; 
+    if (idFolder.empty) { idFolder.delete_; }
+
+    return (!versionFile.exists);
+  }
 
   override bool removeOne(Json select, bool allVersions = false) {
-    if (!pathExists) return false;
+    if (!folder || !folder.exists) return Json(null);
 
-    if ("id" in select) {
-      auto id = UUID(select["id"].get!string);
-      auto pathToId = dirPath(path, id, pathSeparator);
-      if (!pathToId.exists) return false;
-
-      if ("versionNumber" in select) {
-        auto versionNumber = select["versionNumber"].get!size_t;
-        auto pathToVersion = filePath(path, id, versionNumber, pathSeparator);
-        if (!pathToVersion.exists) return false;
-
-        pathToVersion.remove;
-        if (fileNames(pathToId, true).empty) pathToId.remove;
-        return (!pathToVersion.exists ? true : false);  
-      }
+    if (allVersions) { 
+      auto json = findOne(select, allVersions); 
+      if (json == Json(null)) { return false; } 
+      
+      return removeOne(json, false);
     }
- 
-    auto json = findOne(select, allVersions); 
-    if (json != Json(null)) return removeOne(json, false); 
-    return false; }
-  version(test_uim_jsonbase) { unittest {
+
+    if ("id" !in select) { return false; }
+    auto myId = UUID(select["id"].get!string);
+
+    IFolder idFolder = folder.folder(myId);
+    if (idFolder is null) { return false; }
+
+    if ("versionNumber" !in select) { return false; }
+    auto versionNumber = select["versionNumber"].get!size_t;
     
-      auto col = JSBFileCollection("./tests");
-      assert(test_removeOne_jselect(col));
-      assert(test_removeOne_jselect_allVersions(col)); }}
+    auto versionFile = idFolder(versionNumber);
+    if (versionFile is null) { return false; }
+
+    versionFile.delete_; 
+    if (idFolder.empty) idFolder.delete_;
+
+    return (!versionFile.exists);
+  }
 }
 auto JSBFileCollection() { return new DJSBFileCollection;  }
 auto JSBFileCollection(string newPath) { return new DJSBFileCollection(newPath); }
