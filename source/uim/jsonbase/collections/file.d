@@ -91,7 +91,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override Json findOne(STRINGAA select, bool allVersions = false) {
-    if (!folder || !folder.exists) return Json(null);
+    if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) {
       auto jsons = findMany(select, allVersions);
@@ -113,7 +113,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override Json findOne(Json select, bool allVersions = false) {
-    if (!folder || !folder.exists) return Json(null);
+    if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) {
       auto jsons = findMany(select, allVersions);
@@ -136,7 +136,7 @@ class DJSBFileCollection : DJSBCollection {
   alias insertOne = DJSBCollection.insertOne;
 
   override Json insertOne(Json newData) {
-    if (!folder || !folder.exists) return Json(null);
+    if (!folder || !folder.exists) { return Json(null); }
 
     if (newData == Json(null)) return Json(null);
     if ("id" !in newData) newData["id"] = randomUUID.toString;
@@ -261,22 +261,17 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override bool removeOne(UUID id, size_t versionNumber) {
-    if (!folder || !folder.exists) { return false; }  
+    auto myVersionFile = versionFile(folder, id versionNumber);
+    if (myVersionFile is null) { return false; }
 
-    if (auto idFolder = folder.folder(id)) {
-      if (auto versionFile = idFolder(versionNumber)) {
-        versionFile.delete_;
-        if (idFolder.empty) idFolder.delete_;
+    versionFile.delete_;
+    if (idFolder.empty) idFolder.delete_;
         
-        return (!versionFile.exists); 
-      }
-    }
-
-    return false;
+    return (!versionFile.exists); 
   } 
 
   override bool removeOne(STRINGAA select, bool allVersions = false) {
-    if (!folder || !folder.exists) return Json(null);
+    if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) { 
       auto json = findOne(select, allVersions); 
@@ -304,7 +299,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   override bool removeOne(Json select, bool allVersions = false) {
-    if (!folder || !folder.exists) return Json(null);
+    if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) { 
       auto json = findOne(select, allVersions); 
