@@ -1,8 +1,8 @@
 module uim.jsonbase.classes.collections.collection;
 
-@safe:
 import uim.jsonbase;
 
+@safe:
 abstract class DJsonCollection {
   this() { }
 

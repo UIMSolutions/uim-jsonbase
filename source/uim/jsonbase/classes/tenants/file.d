@@ -3,32 +3,22 @@ module uim.jsonbase.classes.tenants.file;
 @safe:
 import uim.jsonbase;
 
-/// FileTenant manages FileCollections
-class DJBFileTenant : DJBTenant {
-  this() { super(); }
+/// FileJsonTenant manages FileCollections
+class DFileJsonTenant : DJsonTenant {
+  mixin(JsonTenantThis!("FileJsonTenant"));
+
   this(string newRootPath) {
-    this();
-    this.rootPath(newRootPath); }
+    this().rootPath(newRootPath); 
+  }
 
-  /// Collection of existing paths
-  protected string _rootPath;
-  @property string rootPath() { return _rootPath; }
-  @property O rootPath(this O)(string newRootPath) { 
-    if (newRootPath.exists) {
-      _rootPath = newRootPath; 
 
-      auto dirs = dirNames(_rootPath);  
-      foreach(dir; dirs) {
-        _collections[dir] = FileJsonCollection(_rootPath~"/"~dir);
-    }}
-
-    return cast(O)this; }
 }
-mixin(JsonTenantCall!("FileJsonTenant"));
-auto JBFileTenant(string newRootPath) { return new DJBFileTenant(newRootPath); }
+mixin(JsonTenantCalls!("FileJsonTenant"));
+
+auto FileJsonTenant(string newRootPath) { return new DFileJsonTenant(newRootPath); }
 
 version(test_uim_jsonbase) { unittest {
-  auto tenant = JBFileTenant("/home/oz/Documents/PROJECTS/DATABASES/uim/uim");
+  auto tenant = FileJsonTenant("/home/oz/Documents/PROJECTS/DATABASES/uim/uim");
   tenant.rootPath("/home/oz/Documents/PROJECTS/DATABASES/uim/central");
    
   foreach(colName, col; tenant.collections) {

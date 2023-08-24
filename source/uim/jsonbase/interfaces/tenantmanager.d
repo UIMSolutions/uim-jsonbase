@@ -13,12 +13,15 @@ interface IJsonTenantManager {
   bool hasTenant(string aName); 
   IJsonTenant tenant(string aName); 
 
-  // Add
-  bool addTenants(ITenant[] someTenants); 
-  bool addTenant(ITenant aTenant); 
+  // Add tenants
+  bool addTenants(IJsonTenant[] someTenants); 
+  bool addTenants(IJsonTenant[] someTenants); 
+  bool addTenants(IJsonTenant[] someTenants); 
+
+  bool addTenant(IJsonTenant aTenant); 
 
   // Create
-  ITenant createTenant(string aName); 
+  IJsonTenant createTenant(string aName); 
 
   // Delete
   bool deleteTenant(string aName); 

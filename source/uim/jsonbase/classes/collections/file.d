@@ -9,21 +9,6 @@ class DFileJsonCollection : DJsonCollection {
   
   mixin(TProperty!("IFolder", "folder"));
 
-  /* this(string newPath) { this().path(newPath); }
-  
-  protected string _pathSeparator = "/";
-  @property auto pathSeparator() { return _pathSeparator; } 
-
-  protected bool _pathExists;
-  @property auto pathExists() { return _pathExists; } 
-
-  protected string _path;
-  @property auto path() { return _path; } 
-  @property void path(string newPath) {
-    _pathExists = newPath.exists && newPath.isDir;
-    _path = pathExists ? newPath : ""; } 
- */
-
   // find many items 
   alias findMany = DJsonCollection.findMany;
 

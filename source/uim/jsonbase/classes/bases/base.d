@@ -7,28 +7,71 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
   this() { initialize; }
 
   void initialize(Json configSettings = Json(null)) { // Hook
-    pathSeparator("/");
   }
 
   mixin(OProperty!("string", "className"));
   mixin(OProperty!("string", "name"));
-  mixin(OProperty!("DJBTenant[string]", "tenants"));
+  
+  // #region TenantManager
+    // Tenants
+    @protected IJsonTenant[string] _tenants;
 
-  bool tenantExist(string tenantName) {
-    return tenantName in _tenants ? true : false; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto base = JsonBase; }}
+    bool hasTenants() {
+      return (countTenants > 0);
+    }
+    size_t countTenants() {
+      return tenants.length;
+    } 
+    IJsonTenant[] tenants() {
+      return _tenants;
+    } 
 
-  DJBTenant opIndex(string tenantName) {
-    return _tenants.get(tenantName, null); }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto base = JsonBase; }}
+    // Tenant
+    bool hasTenant(string aName) {
+      return (tenant(aName) !is null);
+    } 
+    IJsonTenant tenant(string aName) {
+      return _tenants.get(aName, null);
+    } 
 
-  auto tenantNames() { return _tenants.byKey.array; }
-  version(test_uim_jsonbase) { unittest {
-    
-      auto base = JsonBase; }}
+    // Add tenants
+    bool addTenants(IJsonTenant[] someTenants...) {
+      return addTenants(someTenants.dup);
+    }
+
+    bool addTenants(IJsonTenant[] someTenants) {
+      foreach(myTenant; someTenants) {
+        if (!addTenant(myTenant)) { return false; }
+      }
+      return true;
+    }
+
+    bool addTenants(IJsonTenant[string] someTenants) {
+      foreach(myName, myTenant; someTenants) {
+        if (!addTenant(myName, myTenant)) { return false; }
+      }
+      return true;
+    }
+
+    // Add tenant
+    bool addTenant(IJsonTenant aTenant) {
+      return (aTenant ? addTenant(aTenant.name, aTenant);
+    }
+    bool addTenant(string aName, IJsonTenant aTenant) {
+      if (aName.length = 0) return false;
+      if (aTenant is null) return null;
+      
+      _tenants[aName] = aTenant;
+      return true;
+    } 
+
+    // Create
+    IJsonTenant createTenant(string aName) {
+      return null;
+    }
+
+    // Delete
+    bool deleteTenant(string aName); 
+  // #endregion TenantManager
 }
 auto JsonBase() { return new DJsonBase; }
