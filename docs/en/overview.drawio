@@ -1,0 +1,33 @@
+<mxfile host="65bd71144e">
+    <diagram id="kNNWM66P3Z5XmrA7eSrq" name="Page-1">
+        <mxGraphModel dx="1089" dy="503" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="JsonBase" style="shape=process2;fixedSize=1;size=5;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="120" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="JsonTenant" style="shape=process2;fixedSize=1;size=5;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="120" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="JsonCollection" style="shape=process2;fixedSize=1;size=5;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="600" y="120" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <object label="" id="6">
+                    <mxCell style="endArrow=none;startArrow=diamondThin;endFill=0;startFill=0;html=1;verticalAlign=bottom;labelBackgroundColor=none;strokeWidth=1;startSize=8;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="3">
+                        <mxGeometry width="160" relative="1" as="geometry">
+                            <mxPoint x="340" y="260" as="sourcePoint"/>
+                            <mxPoint x="500" y="260" as="targetPoint"/>
+                        </mxGeometry>
+                    </mxCell>
+                </object>
+                <mxCell id="7" value="" style="endArrow=none;startArrow=diamondThin;endFill=0;startFill=0;html=1;verticalAlign=bottom;labelBackgroundColor=none;strokeWidth=1;startSize=8;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="3" target="4">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="340" y="260" as="sourcePoint"/>
+                        <mxPoint x="500" y="260" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
