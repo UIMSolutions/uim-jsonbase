@@ -3,12 +3,12 @@ module uim.jsonbase.classes.collections.memory;
 @safe:
 import uim.jsonbase;
 
-class DJSBMemCollection : DJSBCollection {
+class DJSBMemCollection : DJsonCollection {
   this() { super();  }
   
   protected Json[size_t][UUID] _items;
   
-  alias findMany = DJSBCollection.findMany;
+  alias findMany = DJsonCollection.findMany;
   /// Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
     Json[] results;
@@ -70,7 +70,7 @@ class DJSBMemCollection : DJSBCollection {
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col)); }}
 
-  alias findOne = DJSBCollection.findOne;
+  alias findOne = DJsonCollection.findOne;
   override Json findOne(UUID id, bool allVersions = false) {
     auto result = Json(null); 
 
@@ -173,7 +173,7 @@ class DJSBMemCollection : DJSBCollection {
       assert(test_updateOne_select_data(col)); }}
 
   /// Remove items from collections
-  alias removeMany = DJSBCollection.removeMany;
+  alias removeMany = DJsonCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) {
     size_t result = 0;
@@ -241,7 +241,7 @@ class DJSBMemCollection : DJSBCollection {
       assert(test_removeMany_jselect_allVersions(col)); }}
 
   /// Remove one item or one version from collection
-  alias removeOne = DJSBCollection.removeOne;
+  alias removeOne = DJsonCollection.removeOne;
   /// Remove based on id - allVersions:true - remove all, remove lastVersion 
   override bool removeOne(UUID id, bool allVersions = false) {
     if (id in _items) {

@@ -3,7 +3,7 @@ module uim.jsonbase.classes.bases.base;
 import uim.jsonbase;
 
 @safe:
-class DJSBBase : IJsonBase, IJsonTenantManager{
+class DJsonBase : IJsonBase, IJsonTenantManager{
   this() { initialize; }
 
   void initialize(Json configSettings = Json(null)) { // Hook
@@ -18,17 +18,17 @@ class DJSBBase : IJsonBase, IJsonTenantManager{
     return tenantName in _tenants ? true : false; }
   version(test_uim_jsonbase) { unittest {
     
-      auto base = JSBBase; }}
+      auto base = JsonBase; }}
 
   DJBTenant opIndex(string tenantName) {
     return _tenants.get(tenantName, null); }
   version(test_uim_jsonbase) { unittest {
     
-      auto base = JSBBase; }}
+      auto base = JsonBase; }}
 
   auto tenantNames() { return _tenants.byKey.array; }
   version(test_uim_jsonbase) { unittest {
     
-      auto base = JSBBase; }}
+      auto base = JsonBase; }}
 }
-auto JSBBase() { return new DJSBBase; }
+auto JsonBase() { return new DJsonBase; }

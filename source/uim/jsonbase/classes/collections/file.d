@@ -3,7 +3,7 @@ module uim.jsonbase.classes.collections.file;
 @safe:
 import uim.jsonbase;
 
-class DJSBFileCollection : DJSBCollection {
+class DFileJsonCollection : DJsonCollection {
   this() { super();  }
   this(IFolder aFolder) { this(); folder(aFolder); }
   
@@ -25,17 +25,17 @@ class DJSBFileCollection : DJSBCollection {
  */
 
   // find many items 
-  alias findMany = DJSBCollection.findMany;
+  alias findMany = DJsonCollection.findMany;
 
   // Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
-    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(bool allVersions)");
+    debug writeln(moduleName!DJsonCollection~" - DJsonCollection::findMany(bool allVersions)");
         
     if (!folder || !folder.exists) { return null; }    
-    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(bool allVersions) - Path exists");
+    debug writeln(moduleName!DJsonCollection~" - DJsonCollection::findMany(bool allVersions) - Path exists");
 
     auto ids = folder.folders.map!(f => folder.name).filter!(id => id.isUUID).array; // get all valid ids
-    debug writeln(moduleName!DJSBCollection~" - DJSBCollection::findMany(1) - Found ids = ", ids.length);
+    debug writeln(moduleName!DJsonCollection~" - DJsonCollection::findMany(1) - Found ids = ", ids.length);
 
     return ids.map!(id => findMany(UUID(id), allVersions)).join();
   }
@@ -63,7 +63,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   /// find one item 
-  alias findOne = DJSBCollection.findOne;
+  alias findOne = DJsonCollection.findOne;
 
   /// Find one item in a collection. allVersions:false = last version, allVersion:true = one version
   override Json findOne(UUID id, bool allVersions = false) {
@@ -133,7 +133,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   /// insert one item 
-  alias insertOne = DJSBCollection.insertOne;
+  alias insertOne = DJsonCollection.insertOne;
 
   override Json insertOne(Json newData) {
     if (!folder || !folder.exists) { return Json(null); }
@@ -156,7 +156,7 @@ class DJSBFileCollection : DJSBCollection {
     return findOne(newData); }  
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBFileCollection("./tests");
+      auto col = FileJsonCollection("./tests");
       assert(test_insertOne_data(col));
     }
   }
@@ -176,7 +176,7 @@ class DJSBFileCollection : DJSBCollection {
     return jsons.length; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBFileCollection("./tests");
+      auto col = FileJsonCollection("./tests");
       assert(test_updateMany_select_data(col));
     }
   }
@@ -196,7 +196,7 @@ class DJSBFileCollection : DJSBCollection {
     return jsons.length; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBFileCollection("./tests");
+      auto col = FileJsonCollection("./tests");
       assert(test_updateMany_select_data(col));
     }
   }
@@ -214,7 +214,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   /// Remove items from collections
-  alias removeMany = DJSBCollection.removeMany;
+  alias removeMany = DJsonCollection.removeMany;
   /// Remove items from collectionsby it. allVersions:false - remove lastVersion, allVersion:true / allVersions (complete)
   override size_t removeMany(UUID id, bool allVersions = false) {
     if (!folder || !folder.exists) { return 0; }  
@@ -246,7 +246,7 @@ class DJSBFileCollection : DJSBCollection {
   }
 
   /// Remove one item or one version from collection
-  alias removeOne = DJSBCollection.removeOne;
+  alias removeOne = DJsonCollection.removeOne;
   /// Remove one item from collection
   override bool removeOne(UUID id, bool allVersions = false) {
     if (!folder || !folder.exists) { return false; }  
@@ -326,5 +326,5 @@ class DJSBFileCollection : DJSBCollection {
     return (!versionFile.exists);
   }
 }
-auto JSBFileCollection() { return new DJSBFileCollection;  }
-auto JSBFileCollection(string newPath) { return new DJSBFileCollection(newPath); }
+auto FileJsonCollection() { return new DFileJsonCollection;  }
+auto FileJsonCollection(string newPath) { return new DFileJsonCollection(newPath); }

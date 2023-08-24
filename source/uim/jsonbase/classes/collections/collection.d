@@ -3,7 +3,7 @@ module uim.jsonbase.classes.collections.collection;
 @safe:
 import uim.jsonbase;
 
-abstract class DJSBCollection {
+abstract class DJsonCollection {
   this() { }
 
   bool has(Json entity, UUID id) {

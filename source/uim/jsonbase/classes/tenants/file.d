@@ -19,7 +19,7 @@ class DJBFileTenant : DJBTenant {
 
       auto dirs = dirNames(_rootPath);  
       foreach(dir; dirs) {
-        _collections[dir] = JSBFileCollection(_rootPath~"/"~dir);
+        _collections[dir] = FileJsonCollection(_rootPath~"/"~dir);
     }}
 
     return cast(O)this; }
@@ -32,6 +32,6 @@ version(test_uim_jsonbase) { unittest {
   tenant.rootPath("/home/oz/Documents/PROJECTS/DATABASES/uim/central");
    
   foreach(colName, col; tenant.collections) {
-    writeln(colName, "\t->\t", (cast(DJSBFileCollection)col).path, "\t->\t", col.findMany.length);
+    writeln(colName, "\t->\t", (cast(DFileJsonCollection)col).path, "\t->\t", col.findMany.length);
   }
 }}
