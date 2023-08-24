@@ -1,6 +1,6 @@
 # Übersicht
 
-uim-jsonbase ist eine Bibliothek zur VErwaltung von Datensätzen in Form von Json Objekten.
+uim-jsonbase ist eine Bibliothek zur Verwaltung von Datensätzen in Form von Json Objekten.
 
 Die Bibliothek ist aufgeteilt in die Bereiche
 
