@@ -6,6 +6,7 @@ import uim.jsonbase;
 string jsonBaseThis(string aName) {
   return `
 this() { super(); this.className("`~aName~`"); }
+this(string aName) { this(); this.name(aName); }
   `;
 }
 
@@ -15,12 +16,20 @@ template JsonBaseThis(string aName) {
 
 string jsonBaseCalls(string shortName, string className = null) {
   string clName = className.length > 0 ? className : "D"~shortName;
-  
+
   return `
 auto `~shortName~`() { return new `~clName~`; }
+auto `~shortName~`(string aName) { return new `~clName~`(aName); }
   `;
 }
 
 template JsonBaseCalls(string shortName, string className = null) {
   const char[] JsonBaseCalls = jsonBaseCalls(shortName, className);
+}
+
+unittest {
+  assert(jsonBaseThis("abc") = `
+this() { super(); this.className("abc"); }
+this(string aName) { this(); this.name(aName); }
+  `);
 }

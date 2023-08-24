@@ -3,5 +3,5 @@ module uim.jsonbase.interfaces.tenant;
 import uim.jsonbase;
 
 @safe:
-interface IJsonTenant {  
+interface IJsonTenant : IJsonCollectionManager {  
 }

@@ -36,12 +36,13 @@ class DFileJsonBase : DJsonBase {
   }
 
   // Create
-  IJsonTenant createTenant(string aName) {
-    return FileJsonTenant(aName);
+  override IJsonTenant createTenant(string aName) {
+    addTenant(aName, FileJsonTenant(aName));
+    return tenant(aName);
   }
 }
 mixin(JsonBaseThis!("FileJsonBase"));
-auto FileJsonBase(string newRootPath) { return FileJsonBase.rootPath(newRootPath); }
+auto FileJsonBase(string newRootPath) { return new DFileJsonBase(newRootPath); }
 
 unittest {
   assert(testJsonBase(FileJsonBase));

@@ -39,6 +39,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       return someNames.filter!(n => (tenant(n) ? true : false)).array;
     } 
 
+
     string[] tenantNames() {
       return _tenants.keys;
     } 
@@ -46,12 +47,6 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       return _tenants.values;
     }
 
-    size_t countTenants() {
-      return tenants.length;
-    } 
-    IJsonTenant[] tenants() {
-      return _tenants;
-    } 
 
     // Tenant
     bool hasTenant(string aName) {
@@ -103,4 +98,3 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     }
   // #endregion TenantManager
 }
-auto JsonBase() { return new DJsonBase; }

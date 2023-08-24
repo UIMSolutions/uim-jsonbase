@@ -7,7 +7,7 @@ import uim.jsonbase;
 class DJBMemoryTenant : DJsonTenant {
   mixin(JsonTenantThis!("MemoryJsonTenant"));
 }
-mixin(JsonTenantCall!("MemoryJsonTenant"));
+mixin(JsonTenantCalls!("MemoryJsonTenant"));
 
 unittest {
   assert(testJsonTenant(MemoryJsonTenant));

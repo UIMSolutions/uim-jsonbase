@@ -1,14 +1,15 @@
 module uim.jsonbase.classes.bases.memory;
 
-@safe:
 import uim.jsonbase;
 
+@safe:
 class DMemoryJsonBase : DJsonBase {
   mixin(JsonBaseThis!("MemoryJsonBase"));
 
   // Create
-  IJsonTenant createTenant(string aName) {
-    return MemoryJsonTenant(aName);
+  override IJsonTenant createTenant(string aName) {
+    addTenant(aName, MemoryJsonTenant(aName));
+    return tenant(aName);
   }
 }
 mixin(JsonBaseThis!("MemoryJsonBase"));
