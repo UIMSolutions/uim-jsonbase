@@ -12,12 +12,10 @@ public import uim.oop;
 public import uim.filesystems;
 public import uim.logging;
 
-public import uim.jsonbase.bases;
-public import uim.jsonbase.collections;
+public import uim.jsonbase.classes;
 public import uim.jsonbase.helpers;
 public import uim.jsonbase.interfaces;
 public import uim.jsonbase.mixins;
-public import uim.jsonbase.tenants;
 public import uim.jsonbase.security;
 public import uim.jsonbase.tests;
 
