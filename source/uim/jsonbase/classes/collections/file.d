@@ -4,7 +4,7 @@ module uim.jsonbase.classes.collections.file;
 import uim.jsonbase;
 
 class DFileJsonCollection : DJsonCollection {
-  this() { super();  }
+  mixin(JsonCollectionThis!("FileJsonCollection"));
   this(IFolder aFolder) { this(); folder(aFolder); }
   
   mixin(TProperty!("IFolder", "folder"));
@@ -326,5 +326,5 @@ class DFileJsonCollection : DJsonCollection {
     return (!versionFile.exists);
   }
 }
-auto FileJsonCollection() { return new DFileJsonCollection;  }
+mixin(JsonCollectionCalls!("FileJsonCollection"));
 auto FileJsonCollection(string newPath) { return new DFileJsonCollection(newPath); }

@@ -4,7 +4,8 @@ module uim.jsonbase.classes.bases.file;
 import uim.jsonbase;
 
 class DFileJsonBase : DJsonBase {
-  this() {}
+  mixin(JsonBaseThis!("FileJsonBase"));
+
   this(string newRootPath) {
     this(); this.rootPath(newRootPath); 
   }
@@ -34,7 +35,7 @@ class DFileJsonBase : DJsonBase {
     }
   }
 }
-mixin(JsonBaseCalls!("JsonBase"));
+mixin(JsonBaseThis!("FileJsonBase"));
 auto FileJsonBase(string newRootPath) { return FileJsonBase.rootPath(newRootPath); }
 
 unittest {

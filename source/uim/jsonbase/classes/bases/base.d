@@ -3,7 +3,7 @@ module uim.jsonbase.classes.bases.base;
 import uim.jsonbase;
 
 @safe:
-class DJsonBase : IJsonBase, IJsonTenantManager{
+class DJsonBase : IJsonBase, IJsonTenantManager {
   this() { initialize; }
 
   void initialize(Json configSettings = Json(null)) { // Hook

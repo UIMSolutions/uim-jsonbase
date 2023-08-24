@@ -3,7 +3,7 @@ module uim.jsonbase.classes.tenants.tenant;
 @safe:
 import uim.jsonbase;
 
-class DJBTenant {
+class DJsonTenant : IJsonTenant, IJsonCollectionManager {
   this() {}
 
   protected DJsonCollection[string] _collections;
@@ -24,7 +24,8 @@ class DJBTenant {
     _collections = null;
   }
 }
+mixin(JsonTenantCall!("JsonTenant"));
 
-version(test_uim_jsonbase) { unittest {
-  //
-}}  
+unittest {
+  
+}

@@ -24,7 +24,7 @@ class DJBFileTenant : DJBTenant {
 
     return cast(O)this; }
 }
-auto JBFileTenant() { return new DJBFileTenant; }
+mixin(JsonTenantCall!("FileJsonTenant"));
 auto JBFileTenant(string newRootPath) { return new DJBFileTenant(newRootPath); }
 
 version(test_uim_jsonbase) { unittest {

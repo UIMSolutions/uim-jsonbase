@@ -3,8 +3,8 @@ module uim.jsonbase.classes.collections.memory;
 @safe:
 import uim.jsonbase;
 
-class DJSBMemCollection : DJsonCollection {
-  this() { super();  }
+class DMemoryJsonCollection : DJsonCollection {
+  mixin(JsonCollectionThis!("MemoryJsonCollection"));
   
   protected Json[size_t][UUID] _items;
   
@@ -22,7 +22,7 @@ class DJSBMemCollection : DJsonCollection {
     return results; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;      
+      auto col = MemoryJsonCollection;      
       assert(test_findMany(col));
       assert(test_findMany_allVersions(col)); }}
 
@@ -36,7 +36,7 @@ class DJSBMemCollection : DJsonCollection {
     return results; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findMany_id(col));
       assert(test_findMany_id_allVersions(col));
     }
@@ -52,7 +52,7 @@ class DJSBMemCollection : DJsonCollection {
     return results; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col)); }}
 
@@ -66,7 +66,7 @@ class DJSBMemCollection : DJsonCollection {
     return results; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col)); }}
 
@@ -80,7 +80,7 @@ class DJSBMemCollection : DJsonCollection {
     return result; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findOne_id(col));
       assert(test_findOne_id_allVersions(col)); }}
 
@@ -93,7 +93,7 @@ class DJSBMemCollection : DJsonCollection {
     return result; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findOne_id_versionNumber(col)); }}
 
   override Json findOne(STRINGAA select, bool allVersions = false) {
@@ -103,7 +103,7 @@ class DJSBMemCollection : DJsonCollection {
     return Json(null); }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findMany_select(col));
       assert(test_findMany_select_allVersions(col)); }}
 
@@ -115,7 +115,7 @@ class DJSBMemCollection : DJsonCollection {
     return Json(null); }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_findMany_jselect(col));
       assert(test_findMany_jselect_allVersions(col)); }}
 
@@ -130,7 +130,7 @@ class DJSBMemCollection : DJsonCollection {
     return findOne(newData); }  
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_insertOne_data(col)); }}
 
   override size_t updateMany(Json select, Json updateData) {
@@ -150,7 +150,7 @@ class DJSBMemCollection : DJsonCollection {
     return updates; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_updateMany_select_data(col)); }}
 
   override bool updateOne(Json select, Json updateData) {
@@ -169,7 +169,7 @@ class DJSBMemCollection : DJsonCollection {
     return false; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_updateOne_select_data(col)); }}
 
   /// Remove items from collections
@@ -190,7 +190,7 @@ class DJSBMemCollection : DJsonCollection {
     return result; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeMany_id(col));
       assert(test_removeMany_id_allVersions(col)); }}
 
@@ -213,7 +213,7 @@ class DJSBMemCollection : DJsonCollection {
     return counter; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeMany_select(col));
       assert(test_removeMany_select_allVersions(col)); }}
 
@@ -236,7 +236,7 @@ class DJSBMemCollection : DJsonCollection {
     return counter; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeMany_jselect(col));
       assert(test_removeMany_jselect_allVersions(col)); }}
 
@@ -256,7 +256,7 @@ class DJSBMemCollection : DJsonCollection {
     return false; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeOne_id(col));
       assert(test_removeOne_id_allVersions(col)); }}
 
@@ -269,7 +269,7 @@ class DJSBMemCollection : DJsonCollection {
     return false; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeOne_id_versionNumber(col)); }}
 
   override bool removeOne(STRINGAA select, bool allVersions = false) {
@@ -287,7 +287,7 @@ class DJSBMemCollection : DJsonCollection {
     return false; }
   unittest { 
     version(uim_jsonbase) {
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeOne_select(col));
       assert(test_removeOne_select_allVersions(col)); }}
 
@@ -307,8 +307,8 @@ class DJSBMemCollection : DJsonCollection {
     return false; }
   version(test_uim_jsonbase) { unittest {
     
-      auto col = JSBMemCollection;
+      auto col = MemoryJsonCollection;
       assert(test_removeOne_jselect(col));
       assert(test_removeOne_jselect_allVersions(col)); }}
 }
-auto JSBMemCollection() { return new DJSBMemCollection;  }
+mixin(JsonCollectionCalls!("MemoryJsonCollection"));
