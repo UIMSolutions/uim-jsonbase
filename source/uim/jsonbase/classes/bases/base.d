@@ -1,4 +1,4 @@
-module uim.jsonbase.bases.base;
+module uim.jsonbase.classes.bases.base;
 
 @safe:
 import uim.jsonbase;

@@ -1,8 +1,8 @@
-module uim.jsonbase.bases;
+module uim.jsonbase.classes.bases;
 
 @safe:
 import uim.jsonbase;
 
-public import uim.jsonbase.bases.base;
-public import uim.jsonbase.bases.file;
-public import uim.jsonbase.bases.tests;
+public import uim.jsonbase.classes.bases.base;
+public import uim.jsonbase.classes.bases.file;
+public import uim.jsonbase.classes.bases.tests;

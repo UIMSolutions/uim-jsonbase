@@ -1,10 +1,10 @@
-module uim.jsonbase.collections;
+module uim.jsonbase.classes.collections;
 
 @safe:
 import uim.jsonbase;
 
-public import uim.jsonbase.collections.collection;
-public import uim.jsonbase.collections.file;
-public import uim.jsonbase.collections.memory;
-public import uim.jsonbase.collections.null_;
-public import uim.jsonbase.collections.tests;
+public import uim.jsonbase.classes.collections.collection;
+public import uim.jsonbase.classes.collections.file;
+public import uim.jsonbase.classes.collections.memory;
+public import uim.jsonbase.classes.collections.null_;
+public import uim.jsonbase.classes.collections.tests;

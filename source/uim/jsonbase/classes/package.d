@@ -1,1 +1,1 @@
-module uim.jsonbase.classes;
+module uim.jsonbase.classes.classes;
