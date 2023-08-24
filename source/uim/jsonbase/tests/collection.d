@@ -1,7 +1,13 @@
-module uim.jsonbase.classes.collections.tests;
+module uim.jsonbase.tests.collection;
 
 @safe:
 import uim.jsonbase;
+
+bool testJsonCollection(IJsonCollection aCollection) {
+  if (aCollection is null) return false;
+  
+  return true;
+}
 
 bool test_findMany(DJsonCollection col) {
   col.insertOne(toJson(randomUUID, 22));

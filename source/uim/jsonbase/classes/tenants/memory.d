@@ -10,4 +10,5 @@ class DJBMemoryTenant : DJsonTenant {
 mixin(JsonTenantCall!("MemoryJsonTenant"));
 
 unittest {
+  assert(testJsonTenant(MemoryJsonTenant));
 }

@@ -14,11 +14,38 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
   
   // #region TenantManager
     // Tenants
-    @protected IJsonTenant[string] _tenants;
+    protected IJsonTenant[string] _tenants;
 
-    bool hasTenants() {
-      return (countTenants > 0);
+    bool hasTenants(string[] someNames...) {
+      return hasTenants(someNames.dup);
     }
+    bool hasTenants(string[] someNames = null) { 
+      return (countTenants(someNames) > 0);
+    }
+    
+    size_t countTenants(string[] someNames...) {
+      return countTenants(someNames.dup);
+    } 
+    size_t countTenants(string[] someNames = null){ 
+      if (someNames.length == 0) { return _tenants.length; }
+
+      return someNames.map!(n => (tenant(n) ? 1 : 0)).sum();
+    }
+
+    string[] existingTenants(string[] someNames...) {
+      return countTenants(someNames.dup);
+    }  
+    string[] existingTenants(string[] someNames = null) {
+      return someNames.filter!(n => (tenant(n) ? true : false)).array;
+    } 
+
+    string[] tenantNames() {
+      return _tenants.keys;
+    } 
+    IJsonTenant[] tenants() {
+      return _tenants.values;
+    }
+
     size_t countTenants() {
       return tenants.length;
     } 
@@ -55,7 +82,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
 
     // Add tenant
     bool addTenant(IJsonTenant aTenant) {
-      return (aTenant ? addTenant(aTenant.name, aTenant);
+      return (aTenant ? addTenant(aTenant.name, aTenant) : false);
     }
     bool addTenant(string aName, IJsonTenant aTenant) {
       if (aName.length = 0) return false;
@@ -71,7 +98,9 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     }
 
     // Delete
-    bool deleteTenant(string aName); 
+    bool deleteTenant(string aName) {
+      return false;
+    }
   // #endregion TenantManager
 }
 auto JsonBase() { return new DJsonBase; }

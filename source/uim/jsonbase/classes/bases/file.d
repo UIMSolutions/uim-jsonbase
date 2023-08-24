@@ -44,16 +44,5 @@ mixin(JsonBaseThis!("FileJsonBase"));
 auto FileJsonBase(string newRootPath) { return FileJsonBase.rootPath(newRootPath); }
 
 unittest {
-   IFilesystem myFilesystem;
-    version(Windows) {
-      myFilesystem = WindowsFilesystem;
-    }
-    version(linux) {
-      myFilesystem = LinuxFilesystem;
-    }
-
-    if (auto rootFolder = myFilesystem.folder(".")) {
-      auto folders = rootFolder.folders;
-      folders.each!(f => writeln(f.name));
-    }
+  assert(testJsonBase(FileJsonBase));
 }

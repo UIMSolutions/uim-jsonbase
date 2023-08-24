@@ -313,3 +313,7 @@ class DFileJsonCollection : DJsonCollection {
 }
 mixin(JsonCollectionCalls!("FileJsonCollection"));
 auto FileJsonCollection(string newPath) { return new DFileJsonCollection(newPath); }
+
+unittest {
+  assert(testJsonCollection(FileJsonCollection));
+}
