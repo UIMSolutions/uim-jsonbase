@@ -16,7 +16,6 @@ public import uim.jsonbase.classes;
 public import uim.jsonbase.helpers;
 public import uim.jsonbase.interfaces;
 public import uim.jsonbase.mixins;
-public import uim.jsonbase.security;
 public import uim.jsonbase.tests;
 
 @safe:

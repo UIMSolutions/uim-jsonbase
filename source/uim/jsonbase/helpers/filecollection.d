@@ -2,24 +2,25 @@ module uim.jsonbase.helpers.filecollection;
 
 import uim.jsonbase;
 
+@safe:
 IFolder idFolder(IFolder aFolder, string anId) {
-  if (aFolder is null) { return null; }
-  if (!aFolder.exists) { return null; }
-  if (anId.length == 0) { return null; }
+  if (aFolder is null || !aFolder.exists) { return null; }
   if (!anId.isUUID) { return null; }
 
   return aFolder.folder(anId);
 }
 
-IFile versionFile(IFolder aFolder, string anId, string versionNo = null) {
-  auto myFolder =idFolder(IFolder aFolder, string anId)
+IFile[] versionFiles(IFolder aFolder, string anId) {
+  auto idFolder = idFolder(aFolder, anId);
+  if (idFolder is null) { return null; }
+
+  return idFolder.files();
 }
 
-    IFolder idFolder = folder.folder(myId);
-    if (idFolder is null) { return false; }
+IFile versionFile(IFolder aFolder, string anId, string aVersionNumber = null) {
+  auto idFolder = idFolder(aFolder, anId);
+  if (idFolder is null) { return null; }
 
-    if ("versionNumber" !in select) { return false; }
-    auto versionNumber = select["versionNumber"].get!size_t;
-    
-    auto versionFile = idFolder(versionNumber);
-    if (versionFile is null) { return false; }
+  auto versionFile = idFolder.file(aVersionNumber);
+  return (versionFile? versionFile : null);
+}

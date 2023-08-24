@@ -108,7 +108,7 @@ class DJSBFileCollection : DJSBCollection {
     if (!folder || !folder.exists) { return Json(null); } 
 
     return ("versionNumber" !in select 
-      ? findOne(UUID(select["id"]), allVersions);
+      ? findOne(UUID(select["id"]), allVersions)
       : findOne(UUID(select["id"]), to!size_t(select["versionNumber"]))); 
   }
 
@@ -257,11 +257,11 @@ class DJSBFileCollection : DJSBCollection {
     auto jPath = filePath(path, json, pathSeparator);
     jPath.remove;
 
-    return !jPath.exists; }
+    return !jPath.exists; 
   }
 
   override bool removeOne(UUID id, size_t versionNumber) {
-    auto myVersionFile = versionFile(folder, id versionNumber);
+    auto myVersionFile = versionFile(folder, id, versionNumber);
     if (myVersionFile is null) { return false; }
 
     versionFile.delete_;
@@ -321,7 +321,7 @@ class DJSBFileCollection : DJSBCollection {
     if (versionFile is null) { return false; }
 
     versionFile.delete_; 
-    if (idFolder.empty) idFolder.delete_;
+    if (idFolder.empty) { idFolder.delete_; }
 
     return (!versionFile.exists);
   }

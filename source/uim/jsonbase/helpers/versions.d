@@ -1,8 +1,8 @@
 module uim.jsonbase.helpers.versions;
 
-@safe:
 import uim.jsonbase;
 
+@safe:
 // #region check
   bool checkVersion(Json value, string[] keys = null) {
     if (value == Json(null)) return false;
