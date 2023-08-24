@@ -1,4 +1,4 @@
-module uim.jsonbase.tenants.file;
+module uim.jsonbase.classes.tenants.file;
 
 @safe:
 import uim.jsonbase;
