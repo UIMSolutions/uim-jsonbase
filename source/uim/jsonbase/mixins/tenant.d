@@ -6,6 +6,7 @@ import uim.jsonbase;
 string jsonTenantThis(string aName) {
   return `
 this() { super(); this.className("`~aName~`"); }
+this(string aName) { this(); this.name(aName); }
   `;
 }
 
@@ -18,6 +19,7 @@ string jsonTenantCalls(string shortName, string className = null) {
   
   return `
 auto `~shortName~`() { return new `~clName~`; }
+auto `~shortName~`(string aName) { return new `~clName~`(aName); }
   `;
 }
 

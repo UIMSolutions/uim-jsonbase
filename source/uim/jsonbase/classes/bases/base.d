@@ -4,7 +4,8 @@ import uim.jsonbase;
 
 @safe:
 class DJsonBase : IJsonBase, IJsonTenantManager {
-  this() { initialize; }
+  this() { initialize; this.className("JsonBase"); }
+  this(string aName) { this(); this.name(aName); }
 
   void initialize(Json configSettings = Json(null)) { // Hook
   }
@@ -33,12 +34,11 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     }
 
     string[] existingTenants(string[] someNames...) {
-      return countTenants(someNames.dup);
+      return existingTenants(someNames.dup);
     }  
     string[] existingTenants(string[] someNames = null) {
       return someNames.filter!(n => (tenant(n) ? true : false)).array;
     } 
-
 
     string[] tenantNames() {
       return _tenants.keys;
@@ -80,19 +80,37 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       return (aTenant ? addTenant(aTenant.name, aTenant) : false);
     }
     bool addTenant(string aName, IJsonTenant aTenant) {
-      if (aName.length = 0) return false;
-      if (aTenant is null) return null;
+      if (aName.length == 0) { return false; }
+      if (aTenant is null) { return false; }
       
       _tenants[aName] = aTenant;
       return true;
     } 
 
     // Create
+    IJsonTenant[] createTenants(string[] someNames...) {
+      return createTenants(someNames.dup);
+    }
+    IJsonTenant[] createTenants(string[] someNames) {
+      return someNames.map!(n => createTenant(n)).filter!(t => (t ? true : false)).array;
+    }
+
     IJsonTenant createTenant(string aName) {
       return null;
     }
 
     // Delete
+    bool deleteTenants(string[] someNames...) {
+      return deleteTenants(someNames.dup);
+    }
+    bool deleteTenants(string[] someNames) {
+      foreach(myName; someNames) {
+        if (!deleteTenant(myName)) { return false; }
+      }
+      
+      return true;
+    }
+
     bool deleteTenant(string aName) {
       return false;
     }

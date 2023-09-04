@@ -4,4 +4,5 @@ import uim.jsonbase;
 
 @safe:
 interface IJsonCollection {  
+  string name();
 }

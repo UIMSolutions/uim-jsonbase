@@ -54,22 +54,22 @@ class DFileJsonCollection : DJsonCollection {
   override Json findOne(UUID id, bool allVersions = false) {
     if (!folder || !folder.exists) { return Json(null); }  
 
-    auto idFolder = folder.folder(id.toString);
-    if (idFolder is null) { return Json(null); }  
+    auto myIdFolder = idFolder(folder, id);
+    if (myIdFolder is null) { return Json(null); }  
 
-    auto versionJsons = loadJsonsFromDirectory(idFolder.absolutePath);
+    auto versionJsons = loadJsonsFromDirectory(myIdFolder.absolutePath);
     if (versionJsons.isEmpty)  { return null; }
 
     return allVersions ? versionJsons[0] : lastVersion(versionJsons); 
   }
 
-  override Json findOne(UUID id, size_t versionNumber) {
+  override Json findOne(UUID anId, size_t versionNumber) {
     if (!folder || !folder.exists) { return Json(null); } 
 
-    auto idFolder = folder.folder(id.toString);
-    if (idFolder is null) { return Json(null); }  
+    auto myIdFolder = idFolder(folder, anId);
+    if (myIdFolder is null) { return Json(null); }  
 
-    auto versionFile = folder.file(to!string(versionNumber));
+    auto versionFile = myIdFolder.file(to!string(versionNumber));
     if (versionFile is null) { return Json(null); }  
 
     return loadJson(versionFile.absolutePath); 
@@ -86,8 +86,8 @@ class DFileJsonCollection : DJsonCollection {
     if ("id" !in select) { return Json(null); } 
     auto myId = UUID(select["id"]);
 
-    auto idFolder = folder.folder(id.toString);
-    if (idFolder is null) { return Json(null); }  
+    auto myIdFolder = idFolder(folder, myId);
+    if (myIdFolder is null) { return Json(null); }  
 
     auto result = Json(null); 
     if (!folder || !folder.exists) { return Json(null); } 
@@ -259,28 +259,29 @@ class DFileJsonCollection : DJsonCollection {
     if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) { 
-      auto json = findOne(select, allVersions); 
-      if (json == Json(null)) { return false; } 
+      auto myJson = findOne(select, allVersions); 
+      if (myJson == Json(null)) { return false; } 
       
-      return removeOne(json, false);
+      return removeOne(myJson, false);
     }
 
     if ("id" !in select) { return false; }
     auto myId = UUID(select["id"]);
 
-    auto idFolder = folder.folder(myId);
-    if (idFolder is null) { return false; }
+    auto myIdFolder = idFolder(folder, myId);
+    if (myIdFolder is null) { return false; }
 
-    if ("versionNumber" !in select) { return false; }
-    auto versionNumber = to!size_t(select["versionNumber"]);
+    // Has select a version number?
+    auto myVersionNumber = select.get("versionNumber", null);
     
-    auto versionFile = idFolder(versionNumber);
-    if (versionFile is null) { return false; }
+    // Get a file with selected version or the current version (versionNumber is empty or "*")  
+    auto myVersionFile = versionFile(folder, myId, myVersionNumber);
+    if (myVersionFile is null) { return false; }
 
-    versionFile.delete_; 
-    if (idFolder.empty) { idFolder.delete_; }
+    myVersionFile.delete_; 
+    if (myIdFolder.empty) { myIdFolder.delete_; }
 
-    return (!versionFile.exists);
+    return (!myVersionFile.exists);
   }
 
   override bool removeOne(Json select, bool allVersions = false) {

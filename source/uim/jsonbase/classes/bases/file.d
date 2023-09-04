@@ -1,18 +1,18 @@
 module uim.jsonbase.classes.bases.file;
 
-@safe:
 import uim.jsonbase;
 
+@safe:
 class DFileJsonBase : DJsonBase {
   mixin(JsonBaseThis!("FileJsonBase"));
 
-  this(string newRootPath) {
+/*   this(string newRootPath) {
     this(); this.rootPath(newRootPath); 
-  }
+  } */
 
   mixin(TProperty!("string", "rootPath"));
 
-  void load() {
+/*   void load() {
     IFilesystem myFilesystem;
     version(Windows) {
       myFilesystem = WindowsFilesystem;
@@ -23,7 +23,7 @@ class DFileJsonBase : DJsonBase {
 
     if (auto rootFolder = myFilesystem.folder(rootPath)) {
       auto folders = rootFolder.folders;
-      folders.each!(f => writeln(f.name));
+      folders.each!(f => writeln(f.name)); */
 /*       auto dirs = dirNames(rootPath);  
       debug writeln(__MODULE__~" - found dirs ", dirs);
 
@@ -32,17 +32,16 @@ class DFileJsonBase : DJsonBase {
         _tenants[myDir] = FileJsonTenant(rootPath~"/"~myDir);
       }      
  */    
-    }
-  }
+/*     }
+  } */
 
   // Create
   override IJsonTenant createTenant(string aName) {
-    addTenant(aName, FileJsonTenant(aName));
-    return tenant(aName);
+    return (addTenant(aName, FileJsonTenant(aName)) ? tenant(aName) : null);
   }
 }
-mixin(JsonBaseThis!("FileJsonBase"));
-auto FileJsonBase(string newRootPath) { return new DFileJsonBase(newRootPath); }
+mixin(JsonBaseCalls!("FileJsonBase"));
+// auto FileJsonBase(string newRootPath) { return new DFileJsonBase(newRootPath); }
 
 unittest {
   assert(testJsonBase(FileJsonBase));

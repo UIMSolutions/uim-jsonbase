@@ -4,7 +4,7 @@ module uim.jsonbase.classes.tenants.memory;
 import uim.jsonbase;
 
 /// MemoryTenant manages MemoryCollections
-class DJBMemoryTenant : DJsonTenant {
+class DMemoryJsonTenant : DJsonTenant {
   mixin(JsonTenantThis!("MemoryJsonTenant"));
 }
 mixin(JsonTenantCalls!("MemoryJsonTenant"));

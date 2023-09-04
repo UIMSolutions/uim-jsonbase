@@ -12,7 +12,7 @@ class DMemoryJsonBase : DJsonBase {
     return tenant(aName);
   }
 }
-mixin(JsonBaseThis!("MemoryJsonBase"));
+mixin(JsonBaseCalls!("MemoryJsonBase"));
 
 unittest {
   assert(testJsonBase(MemoryJsonBase));
