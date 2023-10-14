@@ -3,9 +3,13 @@ module uim.jsonbase.mixins.collection;
 import uim.jsonbase;
 
 @safe:
-string jsonCollectionThis(string aName) {
+string jsonCollectionThis(string aClassName) {
   return `
-this() { super(); this.className("`~aName~`"); }
+this() { super(); this.className("`~aClassName~`"); }
+this(IJsonTenant aTenant) { this(); this.tenant(aTenant); }
+this(string aName) { this(); this.name(aName); }
+
+this(IJsonTenant aTenant, string aName) { this(aTenant); this.name(aName); }
   `;
 }
 
@@ -18,6 +22,10 @@ string jsonCollectionCalls(string shortName, string className = null) {
   
   return `
 auto `~shortName~`() { return new `~clName~`; }
+auto `~shortName~`(IJsonTenant aTenant) { return new `~clName~`(aTenant); }
+auto `~shortName~`(string aName) { return new `~clName~`(aName); }
+
+auto `~shortName~`(IJsonTenant aTenant, string aName) { return new `~clName~`(aTenant, aName); }
   `;
 }
 

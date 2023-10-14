@@ -4,8 +4,17 @@ import uim.jsonbase;
 
 @safe:
 abstract class DJsonCollection {
-  this() { }
+  this() { initialize; this.className("JsonCollection"); }
+  this(string aName) { this(); this.name(aName); }
+  this(IJsonTenant aTenant) { this(); this.tenant(aTenant); }
 
+  mixin(TProperty!("string", "className"));
+  mixin(TProperty!("string", "name"));
+  mixin(TProperty!("IJsonTenant", "tenant"));
+
+  void initialize(Json configSettings = Json(null)) { // Hook
+  }
+  
   bool has(Json entity, UUID id) {
     return "id" in entity ? entity["id"].get!string == id.toString : false; }
 

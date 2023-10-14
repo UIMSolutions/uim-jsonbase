@@ -5,4 +5,5 @@ import uim.jsonbase;
 @safe:
 interface IJsonTenant {  
   string name();
+  IJsonBase base();
 }

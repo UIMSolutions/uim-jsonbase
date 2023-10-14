@@ -10,8 +10,8 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
   void initialize(Json configSettings = Json(null)) { // Hook
   }
 
-  mixin(OProperty!("string", "className"));
-  mixin(OProperty!("string", "name"));
+  mixin(TProperty!("string", "className"));
+  mixin(TProperty!("string", "name"));
   
   // #region TenantManager
     // Tenants
@@ -77,9 +77,13 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
 
     // Add tenant
     bool addTenant(IJsonTenant aTenant) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
       return (aTenant ? addTenant(aTenant.name, aTenant) : false);
     }
     bool addTenant(string aName, IJsonTenant aTenant) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+  
       if (aName.length == 0) { return false; }
       if (aTenant is null) { return false; }
       
@@ -87,32 +91,36 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       return true;
     } 
 
-    // Create
-    IJsonTenant[] createTenants(string[] someNames...) {
-      return createTenants(someNames.dup);
-    }
-    IJsonTenant[] createTenants(string[] someNames) {
-      return someNames.map!(n => createTenant(n)).filter!(t => (t ? true : false)).array;
-    }
-
-    IJsonTenant createTenant(string aName) {
-      return null;
-    }
-
-    // Delete
-    bool deleteTenants(string[] someNames...) {
-      return deleteTenants(someNames.dup);
-    }
-    bool deleteTenants(string[] someNames) {
-      foreach(myName; someNames) {
-        if (!deleteTenant(myName)) { return false; }
+    // #region CREATE
+      IJsonTenant[] createTenants(string[] someNames...) {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+    
+        return createTenants(someNames.dup);
       }
-      
-      return true;
-    }
+      IJsonTenant[] createTenants(string[] someNames) {
+        return someNames.map!(n => createTenant(n)).filter!(t => (t ? true : false)).array;
+      }
 
-    bool deleteTenant(string aName) {
-      return false;
-    }
+      IJsonTenant createTenant(string aName) {
+        return null;
+      }
+    // #endregion CREATE
+
+    // #region DELETE
+      bool deleteTenants(string[] someNames...) {
+        return deleteTenants(someNames.dup);
+      }
+      bool deleteTenants(string[] someNames) {
+        foreach(myName; someNames) {
+          if (!deleteTenant(myName)) { return false; }
+        }
+        
+        return true;
+      }
+
+      bool deleteTenant(string aName) {
+        return false;
+      }
+    // #endregion DELETE
   // #endregion TenantManager
 }

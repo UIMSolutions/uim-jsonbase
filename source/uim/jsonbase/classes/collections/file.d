@@ -14,7 +14,7 @@ class DFileJsonCollection : DJsonCollection {
 
   // Find all (many) items in a collection. allVersions:false = find last versions, allVersion:true = find all versions
   override Json[] findMany(bool allVersions = false) {
-    debug writeln(moduleName!DJsonCollection~" - DJsonCollection::findMany(bool allVersions)");
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
         
     if (!folder || !folder.exists) { return null; }    
     debug writeln(moduleName!DJsonCollection~" - DJsonCollection::findMany(bool allVersions) - Path exists");
@@ -27,6 +27,8 @@ class DFileJsonCollection : DJsonCollection {
 
   /// Find all (many) items in a collection with id. allVersions:false = find last version, allVersion:true = find all versions
   override Json[] findMany(UUID anId, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     if (!folder || !folder.exists) { return null; }  
 
     auto idFolder = folder.folder(anId);
@@ -39,11 +41,15 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override Json[] findMany(STRINGAA select, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return super.findMany(select, allVersions); 
   }
 
   /// find items by select - allVersions:false - last versions; allVersions:true - all versions
   override Json[] findMany(Json select, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return super.findMany(select, allVersions); 
   }
 
@@ -52,6 +58,8 @@ class DFileJsonCollection : DJsonCollection {
 
   /// Find one item in a collection. allVersions:false = last version, allVersion:true = one version
   override Json findOne(UUID id, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     if (!folder || !folder.exists) { return Json(null); }  
 
     auto myIdFolder = idFolder(folder, id);
@@ -64,6 +72,8 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override Json findOne(UUID anId, size_t versionNumber) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     if (!folder || !folder.exists) { return Json(null); } 
 
     auto myIdFolder = idFolder(folder, anId);
@@ -76,6 +86,8 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override Json findOne(STRINGAA select, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) {
@@ -98,6 +110,8 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override Json findOne(Json select, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     if (!folder || !folder.exists) { return Json(null); }
 
     if (allVersions) {
@@ -213,7 +227,7 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override size_t removeMany(STRINGAA select, bool allVersions = false) {
-    if (!folder || !folder.exists) { return 0; }  
+    if (select.isEmpty) { return 0; }
 
     size_t counter;
     findMany(select, allVersions).each!(json => counter += removeOne(json, allVersions));
@@ -245,18 +259,23 @@ class DFileJsonCollection : DJsonCollection {
     return !jPath.exists; 
   }
 
-  override bool removeOne(UUID id, size_t versionNumber) {
-    auto myVersionFile = versionFile(folder, id, versionNumber);
+  override bool removeOne(UUID anId, size_t versionNumber = 0) {
+    // Get folder with version files
+    auto myIdFolder = idFolder(folder, anId);
+    if (myIdFolder is null) { return false; }
+
+    // Get a file with selected version or the current version (versionNumber is empty or "*")  
+    auto myVersionFile = versionFile(folder, myId, myVersionNumber);
     if (myVersionFile is null) { return false; }
 
     versionFile.delete_;
-    if (idFolder.empty) idFolder.delete_;
+    if (myIdFolder.empty) idFolder.delete_;
         
     return (!versionFile.exists); 
   } 
 
   override bool removeOne(STRINGAA select, bool allVersions = false) {
-    if (!folder || !folder.exists) { return Json(null); }
+    if (select.isEmpty) { return Json(null); }
 
     if (allVersions) { 
       auto myJson = findOne(select, allVersions); 
@@ -285,7 +304,7 @@ class DFileJsonCollection : DJsonCollection {
   }
 
   override bool removeOne(Json select, bool allVersions = false) {
-    if (!folder || !folder.exists) { return Json(null); }
+    if (select.isEmpty) { return Json(null); }
 
     if (allVersions) { 
       auto json = findOne(select, allVersions); 
@@ -313,7 +332,6 @@ class DFileJsonCollection : DJsonCollection {
   }
 }
 mixin(JsonCollectionCalls!("FileJsonCollection"));
-auto FileJsonCollection(string newPath) { return new DFileJsonCollection(newPath); }
 
 unittest {
   assert(testJsonCollection(FileJsonCollection));

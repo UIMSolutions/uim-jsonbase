@@ -6,7 +6,10 @@ import uim.jsonbase;
 string jsonTenantThis(string aName) {
   return `
 this() { super(); this.className("`~aName~`"); }
+this(IJsonBase aBase) { this(); this.base(aBase); }
 this(string aName) { this(); this.name(aName); }
+
+this(IJsonBase aBase, string aName) { this(aBase); this.name(aName); }
   `;
 }
 
@@ -19,7 +22,9 @@ string jsonTenantCalls(string shortName, string className = null) {
   
   return `
 auto `~shortName~`() { return new `~clName~`; }
+auto `~shortName~`(IJsonBase aBase) { return new `~clName~`(aBase); }
 auto `~shortName~`(string aName) { return new `~clName~`(aName); }
+auto `~shortName~`(IJsonBase aBase, string aName) { return new `~clName~`(aBase, aName); }
   `;
 }
 
