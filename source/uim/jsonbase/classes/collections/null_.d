@@ -52,8 +52,8 @@ class DNullJsonCollection : DJsonCollection {
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
-      assert(col.findOne(randomUUID) == Json(null));
-      assert(col.findOne(randomUUID, true) == Json(null)); 
+      assert(col.findOne(randomUUID).isEmpty);
+      assert(col.findOne(randomUUID, true).isEmpty); 
       // TODO 
       }}
 
@@ -61,7 +61,7 @@ class DNullJsonCollection : DJsonCollection {
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
-      assert(col.findOne(randomUUID, 1) == Json(null));
+      assert(col.findOne(randomUUID, 1).isEmpty);
       // TODO 
       }}
 
@@ -69,8 +69,8 @@ class DNullJsonCollection : DJsonCollection {
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
-      assert(col.findOne(["name":"aName"]) == Json(null));
-      assert(col.findOne(["name":"aName"], true) == Json(null));
+      assert(col.findOne(["name":"aName"]).isEmpty);
+      assert(col.findOne(["name":"aName"], true).isEmpty);
       // TODO 
       }}
 
@@ -78,8 +78,8 @@ class DNullJsonCollection : DJsonCollection {
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
-      assert(col.findOne(toJson(["name":"aName"])) == Json(null));
-      assert(col.findOne(toJson(["name":"aName"]), true) == Json(null));
+      assert(col.findOne(toJson(["name":"aName"])).isEmpty);
+      assert(col.findOne(toJson(["name":"aName"]), true).isEmpty);
       // TODO 
       }}
   // #endregion findOne
@@ -89,7 +89,7 @@ class DNullJsonCollection : DJsonCollection {
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
-      assert(col.insertOne(toJson(["name":"aName"])) == Json(null));
+      assert(col.insertOne(toJson(["name":"aName"])).isEmpty);
       // TODO 
       }}
   // #endregion insertOne

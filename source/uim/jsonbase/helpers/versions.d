@@ -5,7 +5,7 @@ import uim.jsonbase;
 @safe:
 // #region check
   bool checkVersion(Json value, string[] keys = null) {
-    if (value == Json(null)) return false;
+    if (value.isEmpty) return false;
 
     foreach (key; keys) if (key !in value) return false;
     return true;
@@ -48,8 +48,8 @@ import uim.jsonbase;
   }
 
   bool checkVersion(Json ver, Json selector) {
-    if (ver == Json(null)) return false; // Testing against null results in false
-    if (selector == Json(null)) return false; // Testing against null results in false
+    if (ver.isEmpty) return false; // Testing against null results in false
+    if (selector.isEmpty) return false; // Testing against null results in false
 
     foreach (kv; selector.byKeyValue) 
       if (kv.key !in ver || ver[kv.key] != selector[kv.key]) return false;

@@ -16,12 +16,18 @@ abstract class DJsonCollection {
   }
   
   bool has(Json entity, UUID id) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return "id" in entity ? entity["id"].get!string == id.toString : false; }
 
   bool has(Json entity, string name) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return "name" in entity ? entity["name"].get!string == name : false; }
 
   bool has(Json jsonData, size_t versionNumber = 0) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return (versionNumber != 0) && (jsonData["versionNumber"].get!size_t == versionNumber);
   }
 
@@ -48,14 +54,20 @@ abstract class DJsonCollection {
   /// Count items in the collection with id and versions.
   /// allVersion = true include versions; = false results in existing id (1 if exists, 0 if none) 
   size_t count(bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return findMany(allVersions).length; }
 
   size_t count(UUID id, bool allVersions = false) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
     return findMany(id, allVersions).length; }
 
   /// Count all items in the collection with ids and versionNumber.
   /// allVersion = true include versions; = false results in existing ids 
   size_t count(UUID[] ids, size_t versionNumber) {
+    version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+    
     return ids.map!(a => count(a, versionNumber)).sum; }
 
   // Searching for existing id

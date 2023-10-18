@@ -6,4 +6,5 @@ public {
   import uim.jsonbase.mixins.collectionmanager;
   import uim.jsonbase.mixins.tenant;
   import uim.jsonbase.mixins.tenantmanager;
+  import uim.jsonbase.mixins.versions;
 }

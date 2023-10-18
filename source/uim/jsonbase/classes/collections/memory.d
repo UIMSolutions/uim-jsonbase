@@ -120,7 +120,7 @@ class DMemoryJsonCollection : DJsonCollection {
       assert(test_findMany_jselect_allVersions(col)); }}
 
   override Json insertOne(Json newData) {
-    if (newData == Json(null)) return Json(null);
+    if (newData.isEmpty) return Json(null);
     auto id = "id" in newData ? UUID(newData["id"].get!string) : randomUUID;
     auto versionNumber = "versionNumber" in newData ? newData["versionNumber"].get!size_t : 1UL;
 
