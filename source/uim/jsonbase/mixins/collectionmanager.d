@@ -36,56 +36,56 @@ template JsonCollectionManagerTemplate() {
 
       protected IJsonCollection[string] _collections;
     // Collections
-    
 
-    size_t countCollections(string[] someNames...) {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+    // #region countCollections() 
+      size_t countCollections(string[] someNames...) {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-      return countCollections(someNames.dup);
-    } 
+        return countCollections(someNames.dup);
+      } 
 
-    size_t countCollections(string[] someNames = null) {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+      size_t countCollections(string[] someNames = null) {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-      return (someNames 
-        ? someNames.map!(n => (hasCollection(n) ? 1 : 0)).sum
-        : _collections.length);
-    } 
+        // Preconditions
+        if (someNames.isEmpty) { return 0; }
 
-    string[] existingCollections(string[] someNames...) {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
-      
-      return existingCollections(someNames.dup);
-    } 
-    string[] existingCollections(string[] someNames = null) {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+        return someNames.filter!(n => hasCollection(n)).array.length;
+      } 
+    // #endregion countCollections() 
 
-      // Preconditions
-      if (someNames.isEmpty) { return collectionNames(); }
-      
-      // Final
-      return someNames.filter!(n => hasCollection(n)).array;
+    // #region existingCollections() 
+      string[] existingCollections(string[] someNames...) {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+        
+        return existingCollections(someNames.dup);
+      } 
+      string[] existingCollections(string[] someNames = null) {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-    }
+        // Preconditions
+        if (someNames.isEmpty) { return collectionNames(); }
+        
+        // Final
+        return someNames.filter!(n => hasCollection(n)).array;
+      }
+    // #endregion existingCollections() 
 
-    string[] collectionNames() {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+    // #region collectionNames()
+      string[] collectionNames() {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-      return _collections.keys;
-    }
-    IJsonCollection[] collections() {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+        return _collections.keys;
+      }
+    // #endregion collectionNames()
 
-      return _collections.values;
-    }
+    // #region collections()
+      IJsonCollection[] collections() {
+        version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-    // #region hasCollection() 
-    bool hasCollection(string aName) {
-      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
-
-      return (aName in _collections ? true : false);
-    }
-    // #endregion hasCollection() 
+        return _collections.values;
+      }
+    // #endregion collections()
 
     // #region collection() 
       IJsonCollection collection(string aName) {
@@ -109,7 +109,9 @@ template JsonCollectionManagerTemplate() {
         .array
         .length == someCollections.length;
     } 
-    bool addCollections(IJsonCollection[string] someCollections); 
+    bool addCollections(IJsonCollection[string] someCollections) {
+      return false;
+    }
 
     // Add collection
     bool addCollection(IJsonCollection aCollection) {
@@ -124,8 +126,7 @@ template JsonCollectionManagerTemplate() {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
       // Preconditions
-      if (aName.length == 0) { return false; }
-      if (aCollection is null) { return false; }
+      if (aName.isEmpty || aCollection is null) { return false; }
 
       // Body
       _collections[aName] = aCollection;
@@ -135,15 +136,46 @@ template JsonCollectionManagerTemplate() {
     }
 
     // Create Collections
-    IJsonCollection[] createCollections(string[] someNames...); 
-    IJsonCollection[] createCollections(string[] someNames); 
+    IJsonCollection[] createCollections(string[] someNames...) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-    IJsonCollection createCollection(string aName); 
+      return createCollections(someNames.dup);
+    }
 
-    // Delete
-    bool deleteCollections(string[] someNames...); 
-    bool deleteCollections(string[] someNames);
+    IJsonCollection[] createCollections(string[] someNames) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-    bool deleteCollection(string aName); 
-  // #endregion Collection manager 
+      return someNames
+        .map!(n => createCollection(n))
+        .filter!(c => c !is null)
+        .array;      
+    }
+
+    IJsonCollection createCollection(string aName) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
+      return null; 
+    }
+
+  // #region deleteCollections() 
+    bool deleteCollections(string[] someNames...) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
+      return deleteCollections(someNames.dup);
+    }
+
+    bool deleteCollections(string[] someNames) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
+      return someNames
+        .filter!(n => deleteCollection(n))
+        .array.length == someNames.length;      
+    }
+
+    bool deleteCollection(string aName) {
+      version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
+
+      return false;
+    }
+  // #endregion deleteCollections() 
 }

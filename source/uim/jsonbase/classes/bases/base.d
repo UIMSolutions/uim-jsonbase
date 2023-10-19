@@ -28,7 +28,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       return countTenants(someNames.dup);
     } 
     size_t countTenants(string[] someNames = null){ 
-      if (someNames.length == 0) { return _tenants.length; }
+      if (someNames.isEmpty) { return _tenants.length; }
 
       return someNames.map!(n => (tenant(n) ? 1 : 0)).sum();
     }
@@ -84,7 +84,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     bool addTenant(string aName, IJsonTenant aTenant) {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
   
-      if (aName.length == 0) { return false; }
+      if (aName.isEmpty) { return false; }
       if (aTenant is null) { return false; }
       
       _tenants[aName] = aTenant;

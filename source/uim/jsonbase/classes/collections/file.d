@@ -202,7 +202,7 @@ class DFileJsonCollection : DJsonCollection {
 
       // Body
       auto json = findOne(select);
-      if (json.isEmpty) return false;
+      if (json.isEmpty) { return false; }
 
       updateData.byKeyValue.each!(kv => json[kv.key] = kv.value);
 

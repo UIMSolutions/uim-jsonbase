@@ -4,7 +4,7 @@ module uim.jsonbase.tests.collection;
 import uim.jsonbase;
 
 bool testJsonCollection(IJsonCollection aCollection) {
-  if (aCollection is null) return false;
+  if (aCollection is null) { return false; }
   
   return true;
 }

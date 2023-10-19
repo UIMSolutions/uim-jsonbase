@@ -312,7 +312,7 @@ abstract class DJsonCollection : IJsonCollection {
 
       /// remove one selected item
       bool removeOne(Json[] selects, bool allVersions = false) {
-        foreach (select; selects) if (removeOne(select, allVersions)) return true;
+        foreach (select; selects) if (removeOne(select, allVersions)) { return true; }
         return false; }
 
       /// remove one selected item
