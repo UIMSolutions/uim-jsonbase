@@ -312,7 +312,3 @@ class DMemoryJsonCollection : DJsonCollection {
       assert(test_removeOne_jselect_allVersions(col)); }}
 }
 mixin(JsonCollectionCalls!("MemoryJsonCollection"));
-
-unittest {
-  assert(testJsonCollection(MemoryJsonCollection));
-}

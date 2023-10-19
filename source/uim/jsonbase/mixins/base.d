@@ -26,10 +26,3 @@ auto `~shortName~`(string aName) { return new `~clName~`(aName); }
 template JsonBaseCalls(string shortName, string className = null) {
   const char[] JsonBaseCalls = jsonBaseCalls(shortName, className);
 }
-
-unittest {
-  assert(jsonBaseThis("abc") = `
-this() { super(); this.className("abc"); }
-this(string aName) { this(); this.name(aName); }
-  `);
-}

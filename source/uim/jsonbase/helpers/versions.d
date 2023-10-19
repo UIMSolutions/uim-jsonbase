@@ -67,3 +67,111 @@ import uim.jsonbase;
     return (key in entity) && (entity[key].get!T == value);
   }
 // #endregion check
+
+
+import uim.jsonbase;
+
+@safe:
+// #endregion lastVersion()
+Json lastVersion(Json[] jsons) {
+  // Preconditions
+  if (jsons.isEmpty) { return Json(null); }
+
+  // Body
+  Json result = Json(null);
+  jsons
+    .filter!(j => "versionNumber" in j)
+    .each!(j => result = result.isEmpty ? j : result); 
+
+  if (result.isEmpty) { return Json(null); }
+
+  jsons
+    .filter!(j => "versionNumber" in j)
+    .each!(j => j["versionNumber"].get!size_t > result["versionNumber"].get!size_t ? j : result); 
+
+  // Final
+  return result;
+}
+
+Json lastVersion(Json[size_t] jsons) {
+  // Preconditions
+  if (jsons.isEmpty) { return Json(null); }
+
+  // Body
+  Json result = Json(null);
+
+  jsons.values
+    .filter!(j => "versionNumber" in j) 
+    .each!(j => result.isEmpty ? j : result); 
+
+  if (result.isEmpty) { return Json(null); }
+
+  jsons.values
+    .filter!(j => "versionNumber" in j)
+    .each!(j => j["versionNumber"].get!size_t > result["versionNumber"].get!size_t ? j : result); 
+
+  // Final  
+  return result;
+}
+
+Json oneVersion(Json[] jsons) {
+  // Preconditions
+  if (jsons.isEmpty) { return Json(null); }
+
+  // Body
+  Json result = Json(null);
+  jsons
+    .filter!(j => "versionNumber" in j) 
+    .each!(j => result.isEmpty ? j : result); 
+
+  if (result.isEmpty) { return Json(null); } 
+  
+  jsons
+    .filter!(j => "versionNumber" in j)
+    .each!(j => j["versionNumber"].get!size_t > result["versionNumber"].get!size_t ? j : result); 
+
+  // Final
+  return result;
+}
+
+Json oneVersion(Json[size_t] jsons) {
+  // Preconditions
+  if (jsons.isEmpty) { return Json(null); }
+
+  // Body
+  Json result = Json(null);
+  jsons.values
+    .filter!(j => "versionNumber" in j) 
+    .each!(j => result.isEmpty ? j : result); 
+
+  if (result.isEmpty) { return Json(null); } 
+  
+  jsons.values
+    .filter!(j => "versionNumber" in j)
+    .each!(j => j["versionNumber"].get!size_t > result["versionNumber"].get!size_t ? j : result); 
+  
+  return result;
+}
+
+string versionPath(Json json, string sep = "/", string extension = ".json") {
+  if (json.isEmpty) return "";
+ 
+  if ("id" in json && "versionNumber" in json) return json["id"].get!string~sep~"1"~extension;
+
+  return ("id" in json) ? 
+    json["id"].get!string~sep~to!string(json["versionNumber"].get!size_t)~".json" : "";
+}
+
+/* string jsonversionPath(Json json, string sep = "/") {
+  if (json.isEmpty) return "";
+ 
+  if ("id" in json && "versionNumber" in json) return json["id"].get!string~sep~"1.json";
+
+  return ("id" in json) ? 
+    json["id"].get!string~sep~to!string(json["versionNumber"].get!size_t)~".json" : "";
+} */
+
+/* string jsonversionPath(string startPath, Json json, string sep = "/") {
+  if (json.isEmpty) return "";
+  return startPath~sep~jsonversionPath(json, sep);
+} */

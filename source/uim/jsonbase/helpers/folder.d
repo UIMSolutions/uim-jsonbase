@@ -8,7 +8,7 @@ bool folderExists(IFolder aFolder) {
 }
 
 bool subfolderExists(IFolder aFolder, string aName) {
-  return folderExists 
-    ? aFolder.hasFolder(aName)
+  return folderExists(aFolder)
+    ? aFolder.folder(aName) !is null
     : false;
 }
