@@ -1,9 +1,11 @@
 module uim.jsonbase.tests.base;
 
 import uim.jsonbase;
+
 @safe:
 
 bool testJsonBase(IJsonBase aBase) {
+<<<<<<< HEAD
   if (aBase is null) { return false; }
   
   return true;
@@ -44,3 +46,10 @@ bool testJsonBase(IJsonBase aBase) {
     
   }
 // #endregion tenants
+=======
+  if (aBase is null)
+    return false;
+
+  return true;
+}
+>>>>>>> ca5f58dc7f635b04388aff8bf32397e11e9cfb0a
