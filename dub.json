@@ -10,7 +10,7 @@
 	"targetType": "library",
 	"dependencies": {
 		"colored": "~>0.0.31",
-		"vibe-d": "~>0.9.6"
+		"vibe-d": "~>0.9.7"
 	},
 	"sourcePaths": [
 		"../uim-core",
@@ -25,5 +25,16 @@
 		"../uim-filesystems",
 		"../uim-logging",
 		"./"
+	],
+	"configurations": [
+		{
+			"name": "default"
+		},
+		{
+			"name": "testLib",
+			"versions": [
+				"testUimJsonbase"
+			]
+		}
 	]
 }
