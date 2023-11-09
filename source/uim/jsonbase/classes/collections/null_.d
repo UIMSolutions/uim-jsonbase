@@ -105,7 +105,9 @@ class DNullJsonCollection : DJsonCollection {
   // #endregion updateMany
 
   // #region updateOne
-  override bool updateOne(Json select, Json updateData) { return false; }
+  override bool updateOne(Json select, Json updateData) { 
+      return false; 
+    }
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
@@ -149,7 +151,9 @@ class DNullJsonCollection : DJsonCollection {
   /// Remove one item or one version from collection
   alias removeOne = DJsonCollection.removeOne;
   /// Remove based on id - allVersions:true - remove all, remove lastVersion 
-  override bool removeOne(UUID id, bool allVersions = false) { return false; }
+  override bool removeOne(UUID id, bool allVersions = false) { 
+      return false; 
+    }
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
@@ -158,7 +162,9 @@ class DNullJsonCollection : DJsonCollection {
       // TODO
       }}
 
-  override bool removeOne(UUID id, size_t versionNumber) { return false; }
+  override bool removeOne(UUID id, size_t versionNumber) { 
+      return false; 
+    }
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
@@ -166,7 +172,9 @@ class DNullJsonCollection : DJsonCollection {
       // TODO
       }}
 
-  override bool removeOne(STRINGAA select, bool allVersions = false) { return false; }
+  override bool removeOne(STRINGAA select, bool allVersions = false) { 
+      return false; 
+    }
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;
@@ -175,7 +183,9 @@ class DNullJsonCollection : DJsonCollection {
       // TODO
       }}
 
-  override bool removeOne(Json select, bool allVersions = false) { return false; }
+  override bool removeOne(Json select, bool allVersions = false) { 
+      return false; 
+    }
   version(test_uim_jsonbase) { unittest {
     
       auto col = NullJsonCollection;

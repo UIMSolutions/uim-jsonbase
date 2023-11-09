@@ -63,14 +63,18 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
 
     bool addTenants(IJsonTenant[] someTenants) {
       foreach(myTenant; someTenants) {
-        if (!addTenant(myTenant)) { return false; }
+        if (!addTenant(myTenant)) { 
+      return false; 
+    }
       }
       return true;
     }
 
     bool addTenants(IJsonTenant[string] someTenants) {
       foreach(myName, myTenant; someTenants) {
-        if (!addTenant(myName, myTenant)) { return false; }
+        if (!addTenant(myName, myTenant)) { 
+      return false; 
+    }
       }
       return true;
     }
@@ -84,8 +88,12 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     bool addTenant(string aName, IJsonTenant aTenant) {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
   
-      if (aName.isEmpty) { return false; }
-      if (aTenant is null) { return false; }
+      if (aName.isEmpty) { 
+      return false; 
+    }
+      if (aTenant is null) { 
+      return false; 
+    }
       
       _tenants[aName] = aTenant;
       return true;
@@ -112,7 +120,9 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       }
       bool deleteTenants(string[] someNames) {
         foreach(myName; someNames) {
-          if (!deleteTenant(myName)) { return false; }
+          if (!deleteTenant(myName)) { 
+      return false; 
+    }
         }
         
         return true;

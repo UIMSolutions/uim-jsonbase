@@ -198,19 +198,27 @@ class DFileJsonCollection : DJsonCollection {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
       
       // Preconditions
-      if (!folder || !folder.exists) { return false; }  
+      if (!folder || !folder.exists) { 
+      return false; 
+    }  
 
       // Body
       auto json = findOne(select);
-      if (json.isEmpty) { return false; }
+      if (json.isEmpty) { 
+      return false; 
+    }
 
       updateData.byKeyValue.each!(kv => json[kv.key] = kv.value);
 
       auto myFolder = folder.folder(json["id"].get!string);
-      if (myFolder is null) { return false; }
+      if (myFolder is null) { 
+      return false; 
+    }
 
       auto myFile = myFolder.file(json["versionNumber"].get!string);
-      if (myFile is null) { return false; }
+      if (myFile is null) { 
+      return false; 
+    }
 
       myFile.writeJson(json);
 
@@ -267,11 +275,15 @@ class DFileJsonCollection : DJsonCollection {
     /// Remove one item from collection
     override bool removeOne(UUID anId, bool allVersions = false) {
       // Preconditions
-      if (!folder || !folder.exists) { return false; }  
+      if (!folder || !folder.exists) { 
+      return false; 
+    }  
 
       // Body
       auto myFolder = folder.folder(anId.toString);
-      if (myFolder is null) { return false; }
+      if (myFolder is null) { 
+      return false; 
+    }
       
       if (allVersions) { return myFolder.remove; }
 
@@ -281,17 +293,23 @@ class DFileJsonCollection : DJsonCollection {
 
     override bool removeOne(UUID anId, size_t aVersionNumber = 0) {
       // Preconditions
-      if (!folder || !folder.exists) { return false; }  
+      if (!folder || !folder.exists) { 
+      return false; 
+    }  
       
       // Get folder with version files
       auto myFolder = folder.folder(anId.toString);
-      if (myFolder is null) { return false; }
+      if (myFolder is null) { 
+      return false; 
+    }
       
       if (aVersionNumber == 0) { return myFolder.remove; }
 
       // Get a file with selected version or the current version (versionNumber is empty or "*")  
       auto myVersionFile = myFolder.file(to!string(aVersionNumber));
-      if (myVersionFile is null) { return false; }
+      if (myVersionFile is null) { 
+      return false; 
+    }
 
       myVersionFile.remove;
       if (myFolder.isEmpty) myFolder.remove;
@@ -301,21 +319,31 @@ class DFileJsonCollection : DJsonCollection {
 
     override bool removeOne(STRINGAA select, bool allVersions = false) {
       // Preconditions
-      if (!folder || !folder.exists) { return false; }  
-      if (select.isEmpty) { return false; }
+      if (!folder || !folder.exists) { 
+      return false; 
+    }  
+      if (select.isEmpty) { 
+      return false; 
+    }
 
       if (allVersions) { 
         auto myJson = findOne(select, allVersions); 
-        if (myJson.isEmpty) { return false; } 
+        if (myJson.isEmpty) { 
+      return false; 
+    } 
         
         return removeOne(myJson, false);
       }
 
-      if ("id" !in select) { return false; }
+      if ("id" !in select) { 
+      return false; 
+    }
       auto myId = UUID(select["id"]).toString;
 
       auto myFolder = folder.folder(myId);
-      if (myFolder is null) { return false; } // Folder not found
+      if (myFolder is null) { 
+      return false; 
+    } // Folder not found
 
       if (allVersions) { return myFolder.remove; }
 
@@ -325,7 +353,9 @@ class DFileJsonCollection : DJsonCollection {
       
       // Get a file with selected version or the current version (versionNumber is empty or "*")  
       auto myVersionFile = myFolder.file(to!string(myVersionNumber));
-      if (myVersionFile is null) { return false; } // File not found
+      if (myVersionFile is null) { 
+      return false; 
+    } // File not found
 
       myVersionFile.remove; 
       if (myFolder.isEmpty) { myFolder.remove; }
@@ -335,24 +365,34 @@ class DFileJsonCollection : DJsonCollection {
 
     override bool removeOne(Json select, bool allVersions = false) {
       // Preconditions
-      if (select.isEmpty) { return false; }
+      if (select.isEmpty) { 
+      return false; 
+    }
 
       // Body
       if (allVersions) { 
         auto json = findOne(select, allVersions); 
-        if (json.isEmpty) { return false; } 
+        if (json.isEmpty) { 
+      return false; 
+    } 
         
         return removeOne(json, false);
       }
 
-      if ("id" !in select) { return false; }
+      if ("id" !in select) { 
+      return false; 
+    }
       auto myId = UUID(select["id"].get!string);
 
       IFolder idFolder = folder.folder(myId.toString);
-      if (idFolder is null) { return false; }
+      if (idFolder is null) { 
+      return false; 
+    }
       
       auto versionFile = idFolder.file("versionNumber" in select ? select["versionNumber"].get!string : "1");
-      if (versionFile is null) { return false; }
+      if (versionFile is null) { 
+      return false; 
+    }
 
       versionFile.remove; 
       if (idFolder.isEmpty) { idFolder.remove; }

@@ -7,27 +7,12 @@ public {
   import vibe.d;
 }
 
-<<<<<<< HEAD
 public {
   import uim.core;
   import uim.oop;
   import uim.filesystems;
   import uim.logging;
 }
-
-public {
-  import uim.jsonbase.classes;
-  import uim.jsonbase.helpers;
-  import uim.jsonbase.interfaces;
-  import uim.jsonbase.mixins;
-  import uim.jsonbase.tests;
-}
-
-=======
-public import uim.core;
-public import uim.oop;
-public import uim.filesystems;
-public import uim.logging;
 
 public  {
   import uim.jsonbase.classes;
@@ -42,11 +27,13 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
   if (json == Json(null))
     return "";
 
-  if ("id" in json && "versionNumber" in json)
+  if ("id" in json && "versionNumber" in json) {
     return json["id"].get!string ~ sep ~ "1" ~ extension;
+  }
 
   return ("id" in json) ?
-    json["id"].get!string ~ sep ~ to!string(json["versionNumber"].get!size_t) ~ ".json" : "";
+    json["id"].get!string ~ sep ~ to!string(json["versionNumber"].get!size_t) ~ ".json" 
+    : "";
 }
 
 /* string jsonFilePath(Json json, string sep = "/") {
@@ -183,4 +170,3 @@ Json oneVersion(Json[size_t] jsons) {
 
   return result;
 }
->>>>>>> ca5f58dc7f635b04388aff8bf32397e11e9cfb0a

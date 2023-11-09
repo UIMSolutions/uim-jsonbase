@@ -17,7 +17,9 @@ template JsonCollectionManagerTemplate() {
         version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
         // Preconditions
-        if (someNames.isEmpty) { return false; }
+        if (someNames.isEmpty) { 
+      return false; 
+    }
 
         // Body & Final      
         return (countCollections(someNames) > 0);
@@ -126,7 +128,9 @@ template JsonCollectionManagerTemplate() {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
       // Preconditions
-      if (aName.isEmpty || aCollection is null) { return false; }
+      if (aName.isEmpty || aCollection is null) { 
+      return false; 
+    }
 
       // Body
       _collections[aName] = aCollection;
