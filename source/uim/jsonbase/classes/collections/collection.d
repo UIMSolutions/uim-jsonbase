@@ -25,20 +25,32 @@ abstract class DJsonCollection : IJsonCollection {
 
   // #region READ
     // #region has()
-      bool has(Json entity, UUID id) {
+      bool has(Json jsonObject, UUID id) {
         version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-        return "id" in entity ? entity["id"].get!string == id.toString : false; }
+        // IN Check
+        if (jsonObject.isNull) { return false; }
 
-      bool has(Json entity, string name) {
+        // BODY
+        return jsonObject.hasKey("id") ? jsonObject["id"].get!string == id.toString : false; }
+
+      bool has(Json jsonObject, string name) {
         version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-        return "name" in entity ? entity["name"].get!string == name : false; }
+        // IN Check
+        if (jsonObject.isNull) { return false; }
 
-      bool has(Json jsonData, size_t versionNumber = 0) {
+        // BODY
+        return jsonObject.hasKey("name") ? jsonObject["name"].get!string == name : false; }
+
+      bool has(Json jsonObject, size_t versionNumber = 0) {
         version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
 
-        return (versionNumber != 0) && (jsonData["versionNumber"].get!size_t == versionNumber);
+        // IN Check
+        if (jsonObject.isNull) { return false; }
+
+        // BODY
+        return (versionNumber != 0) && (jsonObject["versionNumber"].get!size_t == versionNumber);
       }
     // #endregion has()
 
@@ -60,6 +72,10 @@ abstract class DJsonCollection : IJsonCollection {
     /// Count all items in the collection with ids and versions.
     /// allVersion = true include versions; = false results in existing ids 
     size_t count(UUID[] ids, bool allVersions = false) {
+      // IN Check
+      if (ids.empty) { return 0; }
+
+      // BODY
       return ids.map!(a => count(a, allVersions)).sum; }
 
     /// Count items in the collection with id and versions.
@@ -79,6 +95,10 @@ abstract class DJsonCollection : IJsonCollection {
     size_t count(UUID[] ids, size_t versionNumber) {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
       
+      // IN Check
+      if (ids.empty) { return 0; }
+
+      // BODY
       return ids.map!(a => count(a, versionNumber)).sum; }
 
     // Searching for existing id

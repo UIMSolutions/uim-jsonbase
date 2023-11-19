@@ -24,7 +24,7 @@ public  {
 
 @safe:
 string filePath(Json json, string sep = "/", string extension = ".json") {
-  if (json == Json(null))
+  if (json.isNull)
     return "";
 
   if ("id" in json && "versionNumber" in json) {
@@ -37,7 +37,7 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
 }
 
 /* string jsonFilePath(Json json, string sep = "/") {
-  if (json == Json(null)) return "";
+  if (json.isNull) return "";
  
   if ("id" in json && "versionNumber" in json) return json["id"].get!string~sep~"1.json";
 
@@ -46,7 +46,7 @@ string filePath(Json json, string sep = "/", string extension = ".json") {
 } */
 
 /* string jsonFilePath(string startPath, Json json, string sep = "/") {
-  if (json == Json(null)) return "";
+  if (json.isNull) return "";
   return startPath~sep~jsonFilePath(json, sep);
 } */
 
@@ -59,7 +59,7 @@ string dirPath(UUID id, string separator = "/") {
 }
 
 string dirPath(string path, Json json, string separator = "/") {
-  if (json == Json(null))
+  if (json.isNull)
     return "";
   if ("id" !in json)
     return "";
@@ -68,7 +68,7 @@ string dirPath(string path, Json json, string separator = "/") {
 }
 
 string dirPath(Json json, string separator = "/") {
-  if (json == Json(null))
+  if (json.isNull)
     return "";
   if ("id" !in json)
     return "";
@@ -85,7 +85,7 @@ string filePath(UUID id, size_t versionNumber, string separator = "/") {
 }
 
 string filePath(string path, Json json, string separator = "/") {
-  if (json == Json(null))
+  if (json.isNull)
     return "";
   if ("id" !in json)
     return "";
@@ -94,7 +94,7 @@ string filePath(string path, Json json, string separator = "/") {
 }
 
 string filePath(Json json, string separator = "/") {
-  if (json == Json(null))
+  if (json.isNull)
     return "";
   if ("id" !in json)
     return "";
@@ -107,14 +107,17 @@ Json lastVersion(Json[] jsons) {
   Json result = Json(null);
 
   if (jsons.length > 0) {
-    foreach (json; jsons)
-      if (result == Json(null) && "versionNumber" in json)
+    foreach (json; jsons) {
+      if (result.isNull && "versionNumber" in json)
         result = json;
-    if (result != Json(null))
+    }
+
+    if (!result.isNull) {
       foreach (json; jsons)
         if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
           .get!size_t)
           result = json;
+    }
   }
 
   return result;
@@ -124,14 +127,18 @@ Json lastVersion(Json[size_t] jsons) {
   Json result = Json(null);
 
   if (jsons.length > 0) {
-    foreach (k, json; jsons)
-      if (result == Json(null) && "versionNumber" in json)
+    foreach (k, json; jsons) {
+      if (result.isNull && "versionNumber" in json)
         result = json;
-    if (result != Json(null))
-      foreach (k, json; jsons)
+    }
+  
+    if (!result.isNull) {
+      foreach (k, json; jsons) {
         if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
           .get!size_t)
           result = json;
+      }
+    }
   }
 
   return result;
@@ -139,16 +146,17 @@ Json lastVersion(Json[size_t] jsons) {
 
 Json oneVersion(Json[] jsons) {
   Json result = Json(null);
+  jsons
+    .filter!(json => "versionNumber" in json)
+    .each!(json => result = result.isNull ? json : result);
 
-  if (jsons.length > 0) {
-    foreach (json; jsons)
-      if (result == Json(null) && "versionNumber" in json)
-        result = json;
-    if (result != Json(null))
-      foreach (json; jsons)
+    if (!result.isNull) {
+      foreach (json; jsons) {
         if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
           .get!size_t)
           result = json;
+      }
+    }
   }
 
   return result;
@@ -158,14 +166,18 @@ Json oneVersion(Json[size_t] jsons) {
   Json result = Json(null);
 
   if (jsons.length > 0) {
-    foreach (k, json; jsons)
-      if (result == Json(null) && "versionNumber" in json)
+    foreach (k, json; jsons) {
+      if (result.isNull && "versionNumber" in json)
         result = json;
-    if (result != Json(null))
-      foreach (k, json; jsons)
+    }
+
+    if (!result.isNull) {
+      foreach (k, json; jsons) {
         if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
           .get!size_t)
           result = json;
+      }
+    }
   }
 
   return result;

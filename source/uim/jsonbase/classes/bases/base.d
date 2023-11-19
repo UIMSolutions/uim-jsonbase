@@ -50,7 +50,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
 
     // Tenant
     bool hasTenant(string aName) {
-      return (tenant(aName) !is null);
+      return (!tenant(aName).isNull);
     } 
     IJsonTenant tenant(string aName) {
       return _tenants.get(aName, null);
@@ -64,8 +64,8 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     bool addTenants(IJsonTenant[] someTenants) {
       foreach(myTenant; someTenants) {
         if (!addTenant(myTenant)) { 
-      return false; 
-    }
+          return false; 
+        }
       }
       return true;
     }
@@ -89,11 +89,12 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
   
       if (aName.isEmpty) { 
-      return false; 
-    }
-      if (aTenant is null) { 
-      return false; 
-    }
+        return false; 
+      }
+
+      if (aTenant.isNull) { 
+        return false; 
+      }
       
       _tenants[aName] = aTenant;
       return true;
@@ -106,7 +107,9 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
         return createTenants(someNames.dup);
       }
       IJsonTenant[] createTenants(string[] someNames) {
-        return someNames.map!(n => createTenant(n)).filter!(t => (t ? true : false)).array;
+        return someNames
+          .map!(n => createTenant(n))
+          .filter!(t => (t ? true : false)).array;
       }
 
       IJsonTenant createTenant(string aName) {
@@ -121,8 +124,8 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       bool deleteTenants(string[] someNames) {
         foreach(myName; someNames) {
           if (!deleteTenant(myName)) { 
-      return false; 
-    }
+            return false; 
+          }
         }
         
         return true;

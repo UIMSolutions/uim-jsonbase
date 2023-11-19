@@ -5,9 +5,7 @@ import uim.jsonbase;
 @safe:
 
 bool testJsonBase(IJsonBase aBase) {
-  if (aBase is null) { 
-      return false; 
-    }
+  if (aBase.isNull) { return false; }
   
   return true;
 }

@@ -16,10 +16,14 @@ class DMemoryJsonCollection : DJsonCollection {
     if (auto Ids = _items.byKey.array) {    
       foreach(id; Ids) {
         auto itemsId = _items[id];
-        if (!itemsId.empty) 
-          results ~= allVersions ? itemsId.byValue.array : [lastVersion(itemsId)]; }}
+        if (!itemsId.empty) {
+          results ~= allVersions ? itemsId.byValue.array : [lastVersion(itemsId)]; 
+        }
+      }
+    }
 
-    return results; }
+    return results; 
+  }
   version(test_uim_jsonbase) { unittest {
     
       auto col = MemoryJsonCollection;      

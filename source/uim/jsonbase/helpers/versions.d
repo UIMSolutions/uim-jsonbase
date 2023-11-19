@@ -30,7 +30,7 @@ import uim.jsonbase;
       return false; 
     } // Testing against null results in false
     
-    if (selector.empty) { 
+    if (selector.isEmpty) { 
       return false; 
     } // Testing against null results in false
 
