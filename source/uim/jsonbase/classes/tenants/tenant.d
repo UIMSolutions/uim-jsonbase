@@ -21,3 +21,9 @@ class DJsonTenant : IJsonTenant, IJsonCollectionManager {
   mixin JsonCollectionManagerTemplate!();
 }
 mixin(JsonTenantCalls!("JsonTenant"));
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

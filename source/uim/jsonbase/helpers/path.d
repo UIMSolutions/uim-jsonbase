@@ -65,3 +65,8 @@ import uim.jsonbase;
   }
 // #endregion versionPath()
 
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

@@ -195,3 +195,9 @@ class DNullJsonCollection : DJsonCollection {
       }}
 }
 mixin(JsonCollectionCalls!("NullJsonCollection"));
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

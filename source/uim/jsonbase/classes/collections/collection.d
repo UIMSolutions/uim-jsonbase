@@ -340,3 +340,9 @@ abstract class DJsonCollection : IJsonCollection {
     // #endregion removeOne()
  // #endregion DELETE
 }
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

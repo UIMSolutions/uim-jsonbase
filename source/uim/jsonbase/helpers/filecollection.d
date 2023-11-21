@@ -39,3 +39,9 @@ IFile versionFile(IFolder aFolder, string anId, string aVersionNumber = null) {
   auto versionFile = idFolder.file(aVersionNumber); // TODO not working
   return (versionFile? versionFile : null);
 }
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

@@ -4,10 +4,8 @@ import uim.jsonbase;
 
 @safe:
 
-bool testJsonBase(IJsonBase aBase) {
-  if (aBase.isNull) { return false; }
-  
-  return true;
+bool isNull(IJsonBase aBase) {
+  return (aBase.isNull);
 }
 
 // #region tenant

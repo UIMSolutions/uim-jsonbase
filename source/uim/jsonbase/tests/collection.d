@@ -3,12 +3,8 @@ module uim.jsonbase.tests.collection;
 @safe:
 import uim.jsonbase;
 
-bool testJsonCollection(IJsonCollection aCollection) {
-  if (aCollection.isNull) { 
-      return false; 
-    }
-  
-  return true;
+bool isNull(IJsonCollection aCollection) {
+  return (aCollection is null);
 }
 
 bool test_findMany(DJsonCollection col) {
@@ -64,53 +60,53 @@ bool test_findMany_jselect_allVersions(DJsonCollection col) {
 bool test_findOne_id(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   col.insertOne(json);
-  return !col.findOne(UUID(json["id"].get!string)).isNull;
+  return col.findOne(UUID(json["id"].get!string)) != Json(null);
 }
 
 bool test_findOne_id_allVersions(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   col.insertOne(json);
-  return !col.findOne(UUID(json["id"].get!string), true).isNull;
+  return col.findOne(UUID(json["id"].get!string), true) != Json(null);
 }
 
 bool test_findOne_id_versionNumber(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   col.insertOne(json);
-  return !col.findOne(UUID(json["id"].get!string), 22).isNull;
+  return col.findOne(UUID(json["id"].get!string), 22) != Json(null);
 }
 
 bool test_findOne_select(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   json["name"] = "test";
   col.insertOne(json);
-  return !col.findOne(["name":"test"]).isNull;
+  return col.findOne(["name":"test"]) != Json(null);
 }
 
 bool test_findOne_select_allVersions(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   json["name"] = "test";
   col.insertOne(json);
-  return !col.findOne(["name":"test"], true).isNull;
+  return col.findOne(["name":"test"], true) != Json(null);
 }
 
 bool test_findOne_jselect(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   json["name"] = "test";
   col.insertOne(json);
-  return !col.findOne(json).isNull;
+  return col.findOne(json) != Json(null);
 }
 
 bool test_findOne_jselect_allVersions(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   json["name"] = "test";
   col.insertOne(json);
-  return !col.findOne(json, true).isNull;
+  return col.findOne(json, true) != Json(null);
 }
 
 bool test_insertOne_data(DJsonCollection col) {
   auto json = toJson(randomUUID, 22);
   col.insertOne(json);
-  return !col.findOne(json).isNull;
+  return col.findOne(json) != Json(null);
 }
 
 bool test_updateMany_select_data(DJsonCollection col) {

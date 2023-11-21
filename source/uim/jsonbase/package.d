@@ -145,40 +145,9 @@ Json lastVersion(Json[size_t] jsons) {
 }
 
 Json oneVersion(Json[] jsons) {
-  Json result = Json(null);
-  jsons
-    .filter!(json => "versionNumber" in json)
-    .each!(json => result = result.isNull ? json : result);
-
-    if (!result.isNull) {
-      foreach (json; jsons) {
-        if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
-          .get!size_t)
-          result = json;
-      }
-    }
-  }
-
-  return result;
+  return jsonWithMaxVersion(jsons);
 }
 
 Json oneVersion(Json[size_t] jsons) {
-  Json result = Json(null);
-
-  if (jsons.length > 0) {
-    foreach (k, json; jsons) {
-      if (result.isNull && "versionNumber" in json)
-        result = json;
-    }
-
-    if (!result.isNull) {
-      foreach (k, json; jsons) {
-        if ("versionNumber" in json && json["versionNumber"].get!size_t > result["versionNumber"]
-          .get!size_t)
-          result = json;
-      }
-    }
-  }
-
-  return result;
+  return jsonWithMaxVersion(jsons.byValue.array);
 }

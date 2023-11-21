@@ -50,7 +50,7 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
 
     // Tenant
     bool hasTenant(string aName) {
-      return (!tenant(aName).isNull);
+      return (tenant(aName) !is null);
     } 
     IJsonTenant tenant(string aName) {
       return _tenants.get(aName, null);
@@ -73,8 +73,8 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     bool addTenants(IJsonTenant[string] someTenants) {
       foreach(myName, myTenant; someTenants) {
         if (!addTenant(myName, myTenant)) { 
-      return false; 
-    }
+          return false; 
+        }
       }
       return true;
     }
@@ -88,11 +88,8 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
     bool addTenant(string aName, IJsonTenant aTenant) {
       version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }
   
-      if (aName.isEmpty) { 
-        return false; 
-      }
-
-      if (aTenant.isNull) { 
+      if (aName.isEmpty 
+        || aTenant is null) { 
         return false; 
       }
       
@@ -136,4 +133,10 @@ class DJsonBase : IJsonBase, IJsonTenantManager {
       }
     // #endregion DELETE
   // #endregion TenantManager
+}
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
 }

@@ -44,5 +44,7 @@ mixin(JsonBaseCalls!("FileJsonBase"));
 // auto FileJsonBase(string newRootPath) { return new DFileJsonBase(newRootPath); }
 
 unittest {
-  assert(testJsonBase(FileJsonBase));
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
 }

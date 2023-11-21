@@ -2,6 +2,12 @@ module uim.jsonbase.helpers.versions;
 
 import uim.jsonbase;
 
+version(testUimJsonbase) { 
+  unittest {
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
 @safe:
 // #region check
   bool checkVersion(Json aVersion, string[] keys = null) {
@@ -201,3 +207,4 @@ string versionPath(Json json, string sep = "/", string extension = ".json") {
   if (json.isEmpty) return "";
   return startPath~sep~jsonversionPath(json, sep);
 } */
+

@@ -403,3 +403,9 @@ class DFileJsonCollection : DJsonCollection {
   // #endregion removeOne()
 }
 mixin(JsonCollectionCalls!("FileJsonCollection"));
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

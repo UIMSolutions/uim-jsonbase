@@ -12,3 +12,9 @@ bool subfolderExists(IFolder aFolder, string aName) {
     ? aFolder.folder(aName) !is null
     : false;
 }
+
+unittest {
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}

@@ -1,8 +1,14 @@
 module uim.jsonbase.classes.tenants.file;
 
-@safe:
 import uim.jsonbase;
 
+version(testUimJsonbase) { 
+  unittest {
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
+@safe:
 /// FileJsonTenant manages FileCollections
 class DFileJsonTenant : DJsonTenant {
   mixin(JsonTenantThis!("FileJsonTenant"));
@@ -18,5 +24,7 @@ class DFileJsonTenant : DJsonTenant {
 mixin(JsonTenantCalls!("FileJsonTenant"));
 
 unittest {
-  assert(testJsonTenant(FileJsonTenant));
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
 }

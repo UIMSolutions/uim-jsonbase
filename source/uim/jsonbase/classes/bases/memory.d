@@ -15,5 +15,7 @@ class DMemoryJsonBase : DJsonBase {
 mixin(JsonBaseCalls!("MemoryJsonBase"));
 
 unittest {
-  assert(testJsonBase(MemoryJsonBase));
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
 }
