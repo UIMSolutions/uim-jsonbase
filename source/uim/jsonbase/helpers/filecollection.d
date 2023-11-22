@@ -2,6 +2,12 @@ module uim.jsonbase.helpers.filecollection;
 
 import uim.jsonbase;
 
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
 @safe:
 IFolder idFolder(IFolder aFolder, UUID anId) {
   version(testUimJsonbase) { debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); }

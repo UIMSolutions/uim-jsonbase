@@ -1,7 +1,14 @@
 module uim.jsonbase.classes.collections.file;
 
-@safe:
 import uim.jsonbase;
+
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
+@safe:
 
 class DFileJsonCollection : DJsonCollection {
   mixin(JsonCollectionThis!("FileJsonCollection"));

@@ -2,6 +2,12 @@ module uim.jsonbase.helpers.path;
 
 import uim.jsonbase;
 
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
 @safe:
 // #region folderPath()
   string folderPath(string path, Json json, string separator = "/") {
@@ -65,8 +71,3 @@ import uim.jsonbase;
   }
 // #endregion versionPath()
 
-unittest {
-  version(testUimJsonbase) { 
-    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
-  }
-}

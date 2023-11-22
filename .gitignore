@@ -28,3 +28,4 @@ uim-jsonbase-test-uim_jsonbase
 uim-jsonbase-test-uim-jsonbase
 source/uim/jsonbase/classes/package.d
 dub.selections.json
+uim-jsonbase-test-testLib

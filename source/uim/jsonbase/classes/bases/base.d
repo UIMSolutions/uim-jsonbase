@@ -2,6 +2,12 @@ module uim.jsonbase.classes.bases.base;
 
 import uim.jsonbase;
 
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
 @safe:
 class DJsonBase : IJsonBase, IJsonTenantManager {
   this() { initialize; this.className("JsonBase"); }

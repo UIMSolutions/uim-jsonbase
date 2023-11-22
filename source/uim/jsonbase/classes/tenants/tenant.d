@@ -1,8 +1,14 @@
 module uim.jsonbase.classes.tenants.tenant;
 
-@safe:
 import uim.jsonbase;
 
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
+@safe:
 class DJsonTenant : IJsonTenant, IJsonCollectionManager {
   this() { initialize; this.className("JsonTenant"); }
   this(IJsonBase aBase) { this(); this.base(aBase); }

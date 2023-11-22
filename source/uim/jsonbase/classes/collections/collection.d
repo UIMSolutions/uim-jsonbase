@@ -2,6 +2,12 @@ module uim.jsonbase.classes.collections.collection;
 
 import uim.jsonbase;
 
+unittest { 
+  version(testUimJsonbase) { 
+    debug writeln("\n", __MODULE__~":"~__PRETTY_FUNCTION__); 
+  }
+}
+
 @safe:
 abstract class DJsonCollection : IJsonCollection {
   this() { initialize; this.className("JsonCollection"); }
