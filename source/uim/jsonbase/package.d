@@ -16,6 +16,7 @@ public {
 
 public  {
   import uim.jsonbase.classes;
+  import uim.jsonbase.exceptions;
   import uim.jsonbase.helpers;
   import uim.jsonbase.interfaces;
   import uim.jsonbase.mixins;
